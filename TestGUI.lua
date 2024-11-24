@@ -105,24 +105,25 @@ local user = game.Players.LocalPlayer
 local character = user.Character or user.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 local flying = false
+local bodyVelocity = Instance.new("BodyVelocity")
+bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000) -- Starke Kraft um die Bewegung zu stabilisieren
+bodyVelocity.Velocity = Vector3.new(0, 0, 0) -- Start-Velocity
 
 -- Funktion, um den Flieger zu starten
 local function startFlying()
     if not flying then
         flying = true
-        game:GetService("RunService").Heartbeat:Connect(function()
-            if flying then
-                humanoid.PlatformStand = true
-                humanoid:Move(Vector3.new(0, 10, 0)) -- Sanfte Aufwärtsbewegung
-            end
-        end)
+        bodyVelocity.Parent = character:WaitForChild("HumanoidRootPart") -- Hinzufügen des BodyVelocity
+        bodyVelocity.Velocity = Vector3.new(0, 50, 0) -- Aufwärtsbewegung
     end
 end
 
 -- Funktion, um das Fliegen zu stoppen
 local function stopFlying()
-    flying = false
-    humanoid.PlatformStand = false
+    if flying then
+        flying = false
+        bodyVelocity.Parent = nil -- Entfernen des BodyVelocity, sodass die Aufwärtsbewegung gestoppt wird
+    end
 end
 
 -- Button für die Leertaste (Fun Tab)
