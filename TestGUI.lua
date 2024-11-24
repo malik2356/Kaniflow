@@ -57,7 +57,7 @@ for i, tabName in ipairs(tabs) do
     tabContent.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     tabContent.Parent = contentFrame
 
-    -- Platzhalter: Buttons und Checkboxen
+    -- Platzhalter: Buttons
     for j = 1, 3 do
         local button = Instance.new("TextButton")
         button.Size = UDim2.new(0, 100, 0, 30)
@@ -69,76 +69,71 @@ for i, tabName in ipairs(tabs) do
         button.TextSize = 14
         button.Parent = tabContent
     end
-
-    for k = 1, 2 do
-        local checkbox = Instance.new("TextButton")
-        checkbox.Size = UDim2.new(0, 20, 0, 20)
-        checkbox.Position = UDim2.new(0, 140, 0, 20 + (k - 1) * 40)
-        checkbox.Text = ""
-        checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-        checkbox.Parent = tabContent
-
-        -- Klick-Event für Checkbox (wechselt Farbe bei Klick)
-        checkbox.MouseButton1Click:Connect(function()
-            if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
-                checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
-            else
-                checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
-            end
-        end)
-    end
 end
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
 cheatNameLabel.Size = UDim2.new(0, 100, 1, 0)
 cheatNameLabel.Position = UDim2.new(1, -100, 0, 0) -- Rechts neben dem letzten Tab
-cheatNameLabel.Text = "Kaniflow" -- Name deines Cheats
-cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Dunkler Hintergrund
-cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255) -- Leuchtend blau
+cheatNameLabel.Text = "Kaniflow"
+cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
 cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
 
--- Funktion für das Fliegen
-local user = game.Players.LocalPlayer
-local character = user.Character or user.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+-- **Fliegen-Funktion im Fun-Tab**
 local flying = false
-local bodyVelocity = Instance.new("BodyVelocity")
-bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000) -- Starke Kraft um die Bewegung zu stabilisieren
-bodyVelocity.Velocity = Vector3.new(0, 0, 0) -- Start-Velocity
+local bodyVelocity
 
--- Funktion, um den Flieger zu starten
-local function startFlying()
-    if not flying then
+local function toggleFlying(state)
+    local character = game.Players.LocalPlayer.Character
+    if not character then return end
+
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    
+    if state then
+        -- Fliegen starten
         flying = true
-        bodyVelocity.Parent = character:WaitForChild("HumanoidRootPart") -- Hinzufügen des BodyVelocity
-        bodyVelocity.Velocity = Vector3.new(0, 50, 0) -- Aufwärtsbewegung
-    end
-end
-
--- Funktion, um das Fliegen zu stoppen
-local function stopFlying()
-    if flying then
-        flying = false
-        bodyVelocity.Parent = nil -- Entfernen des BodyVelocity, sodass die Aufwärtsbewegung gestoppt wird
-    end
-end
-
--- Toggle-Flugsteuerung
-local isFlying = false
-
--- Tasteneingabe für Leertaste (Toggle-Flug)
-local userInputService = game:GetService("UserInputService")
-
-userInputService.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.Space then
-        if isFlying then
-            stopFlying() -- Wenn bereits in der Luft, stoppen wir den Flug
-        else
-            startFlying() -- Wenn nicht in der Luft, starten wir den Flug
+        if not bodyVelocity then
+            bodyVelocity = Instance.new("BodyVelocity")
+            bodyVelocity.MaxForce = Vector3.new(0, 5000, 0) -- Begrenze Kraft nur nach oben
+            bodyVelocity.P = 1250
+            bodyVelocity.Velocity = Vector3.zero -- Startgeschwindigkeit auf 0
+            bodyVelocity.Parent = humanoidRootPart
         end
-        isFlying = not isFlying -- Toggle-Status
+    else
+        -- Fliegen stoppen
+        flying = false
+        if bodyVelocity then
+            bodyVelocity:Destroy()
+            bodyVelocity = nil
+        end
     end
-end)
+end
+
+-- Fun-Tab-Button: Fliegen aktivieren
+local funTab = contentFrame:FindFirstChild("Fun")
+if funTab then
+    local flyButton = funTab:FindFirstChild("Button 1")
+    if flyButton then
+        flyButton.Text = "Enable Fly Mode"
+        flyButton.MouseButton1Click:Connect(function()
+            local userInput = game:GetService("UserInputService")
+            
+            userInput.InputBegan:Connect(function(input, isProcessed)
+                if isProcessed then return end
+                if input.KeyCode == Enum.KeyCode.Space then
+                    toggleFlying(true) -- Fliegen starten
+                end
+            end)
+            
+            userInput.InputEnded:Connect(function(input, isProcessed)
+                if isProcessed then return end
+                if input.KeyCode == Enum.KeyCode.Space then
+                    toggleFlying(false) -- Fliegen stoppen
+                end
+            end)
+        end)
+    end
+end
