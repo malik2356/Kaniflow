@@ -85,14 +85,14 @@ for i, tabName in ipairs(tabs) do
     end
 end
 
--- Name des Cheats anzeigen
+-- Name des Cheats anzeigen (Wieder zurückgesetzt)
 local cheatName = Instance.new("TextLabel")
-cheatName.Size = UDim2.new(0, 100, 0, 50)
-cheatName.Position = UDim2.new(1, -120, 0, 0)
+cheatName.Size = UDim2.new(0, 200, 0, 50)
+cheatName.Position = UDim2.new(1, -210, 0, 0)
 cheatName.BackgroundTransparency = 1
-cheatName.Text = "Mein Cheat"  -- Hier kannst du den Namen deines Cheats anpassen
-cheatName.TextColor3 = Color3.fromRGB(0, 0, 255)  -- Leuchtend Blau
-cheatName.TextSize = 24
+cheatName.Text = "Dein Cheat Name"  -- Hier kannst du den Namen deines Cheats anpassen
+cheatName.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Weiße Farbe
+cheatName.TextSize = 16
 cheatName.TextXAlignment = Enum.TextXAlignment.Right
 cheatName.Parent = tabBar
 
@@ -113,17 +113,19 @@ stealCarButton.MouseButton1Click:Connect(function()
     local closestCar = nil
     local closestDistance = math.huge
 
-    -- Gehe durch alle Autos in der Nähe
+    -- Gehe durch alle Modelle und suche nach Fahrzeugen
     for _, vehicle in pairs(workspace:GetDescendants()) do
         if vehicle:IsA("Model") and vehicle:FindFirstChild("DriverSeat") then
             local driverSeat = vehicle:FindFirstChild("DriverSeat")
-            local seatPosition = driverSeat.Position
-            local distance = (seatPosition - humanoidRootPart.Position).Magnitude
+            if driverSeat then
+                local seatPosition = driverSeat.Position
+                local distance = (seatPosition - humanoidRootPart.Position).Magnitude
 
-            -- Finde das Auto, das am nächsten zum Spieler ist
-            if distance < closestDistance then
-                closestCar = vehicle
-                closestDistance = distance
+                -- Wenn das Fahrzeug näher ist als das vorige, wird es als das "nächste" Auto gesetzt
+                if distance < closestDistance then
+                    closestCar = vehicle
+                    closestDistance = distance
+                end
             end
         end
     end
