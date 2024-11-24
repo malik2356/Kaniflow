@@ -21,97 +21,136 @@ contentFrame.Position = UDim2.new(0, 0, 0, 50)
 contentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 contentFrame.Parent = mainFrame
 
--- Tabs und Inhalte
-local tabs = {"Home", "Settings", "Fun"} -- Beispiel-Reiter
+-- Tab: "Home"
+local homeTab = Instance.new("Frame")
+homeTab.Name = "Home"
+homeTab.Size = UDim2.new(1, 0, 1, 0)
+homeTab.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+homeTab.Parent = contentFrame
 
-for i, tabName in ipairs(tabs) do
-    local tabButton = Instance.new("TextButton")
-    tabButton.Size = UDim2.new(0, 100, 1, 0)
-    tabButton.Position = UDim2.new(0, (i - 1) * 100, 0, 0)
-    tabButton.Text = tabName
-    tabButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    tabButton.TextColor3 = Color3.new(1, 1, 1)
-    tabButton.Font = Enum.Font.SourceSansBold
-    tabButton.TextSize = 18
-    tabButton.Parent = tabBar
+-- Button 1: Steal Car
+local stealCarButton = Instance.new("TextButton")
+stealCarButton.Size = UDim2.new(0, 100, 0, 30)
+stealCarButton.Position = UDim2.new(0, 20, 0, 20)
+stealCarButton.Text = "Steal Car"
+stealCarButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+stealCarButton.TextColor3 = Color3.new(1, 1, 1)
+stealCarButton.Font = Enum.Font.SourceSans
+stealCarButton.TextSize = 14
+stealCarButton.Parent = homeTab
 
-    -- Klick-Event für Tabs
-    tabButton.MouseButton1Click:Connect(function()
-        -- Alle Inhalte verstecken
-        for _, child in pairs(contentFrame:GetChildren()) do
-            child.Visible = false
-        end
+-- Button 2: Car Fly
+local carFlyButton = Instance.new("TextButton")
+carFlyButton.Size = UDim2.new(0, 100, 0, 30)
+carFlyButton.Position = UDim2.new(0, 20, 0, 60)
+carFlyButton.Text = "Car Fly"
+carFlyButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+carFlyButton.TextColor3 = Color3.new(1, 1, 1)
+carFlyButton.Font = Enum.Font.SourceSans
+carFlyButton.TextSize = 14
+carFlyButton.Parent = homeTab
 
-        -- Inhalt für diesen Tab anzeigen (falls existiert)
-        local tabContent = contentFrame:FindFirstChild(tabName)
-        if tabContent then
-            tabContent.Visible = true
-        end
-    end)
+-- Button 3: Infinite Yield
+local infiniteYieldButton = Instance.new("TextButton")
+infiniteYieldButton.Size = UDim2.new(0, 100, 0, 30)
+infiniteYieldButton.Position = UDim2.new(0, 20, 0, 100)
+infiniteYieldButton.Text = "Infinite Yield"
+infiniteYieldButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+infiniteYieldButton.TextColor3 = Color3.new(1, 1, 1)
+infiniteYieldButton.Font = Enum.Font.SourceSans
+infiniteYieldButton.TextSize = 14
+infiniteYieldButton.Parent = homeTab
 
-    -- Inhaltsbereich für den Tab
-    local tabContent = Instance.new("Frame")
-    tabContent.Name = tabName
-    tabContent.Size = UDim2.new(1, 0, 1, 0)
-    tabContent.Visible = (i == 1) -- Nur der erste Tab ist sichtbar
-    tabContent.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    tabContent.Parent = contentFrame
+-- Checkbox 1: Enable Feature 1
+local feature1Checkbox = Instance.new("Frame")
+feature1Checkbox.Size = UDim2.new(0, 200, 0, 30)
+feature1Checkbox.Position = UDim2.new(0, 140, 0, 20)
+feature1Checkbox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+feature1Checkbox.Parent = homeTab
 
-    -- Platzhalter: Buttons und Checkboxen
-    for j = 1, 3 do
-        local button = Instance.new("TextButton")
-        button.Size = UDim2.new(0, 100, 0, 30)
-        button.Position = UDim2.new(0, 20, 0, 20 + (j - 1) * 40)
-        button.Text = "Button " .. j
-        button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-        button.TextColor3 = Color3.new(1, 1, 1)
-        button.Font = Enum.Font.SourceSans
-        button.TextSize = 14
-        button.Parent = tabContent
+local feature1Label = Instance.new("TextLabel")
+feature1Label.Size = UDim2.new(1, 0, 1, 0)
+feature1Label.Text = "Enable Feature 1"
+feature1Label.TextColor3 = Color3.new(1, 1, 1)
+feature1Label.TextSize = 14
+feature1Label.BackgroundTransparency = 1
+feature1Label.Parent = feature1Checkbox
 
-        -- Funktionalität für den ersten Button im Home-Tab
-        if tabName == "Home" and j == 1 then
-            button.MouseButton1Click:Connect(function()
-                local player = game.Players.LocalPlayer
-                local backpack = player:WaitForChild("Backpack")
-                local tool = game:GetService("ReplicatedStorage"):WaitForChild("Tools"):FindFirstChild("Keks")
+local feature1Toggle = Instance.new("TextButton")
+feature1Toggle.Size = UDim2.new(0, 30, 0, 30)
+feature1Toggle.Position = UDim2.new(1, -40, 0, 0)
+feature1Toggle.Text = "Off"
+feature1Toggle.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+feature1Toggle.TextColor3 = Color3.new(1, 1, 1)
+feature1Toggle.Font = Enum.Font.SourceSans
+feature1Toggle.TextSize = 14
+feature1Toggle.Parent = feature1Checkbox
 
-                if tool then
-                    local clone = tool:Clone()
-                    clone.Parent = backpack
-                else
-                    warn("Tool 'Keks' nicht in ReplicatedStorage.Tools gefunden!")
-                end
-            end)
-        end
-    end
+-- Checkbox 2: Enable Feature 2
+local feature2Checkbox = Instance.new("Frame")
+feature2Checkbox.Size = UDim2.new(0, 200, 0, 30)
+feature2Checkbox.Position = UDim2.new(0, 140, 0, 60)
+feature2Checkbox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+feature2Checkbox.Parent = homeTab
 
-    for k = 1, 2 do
-        local checkbox = Instance.new("TextButton")
-        checkbox.Size = UDim2.new(0, 20, 0, 20)
-        checkbox.Position = UDim2.new(0, 140, 0, 20 + (k - 1) * 40)
-        checkbox.Text = ""
-        checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-        checkbox.Parent = tabContent
+local feature2Label = Instance.new("TextLabel")
+feature2Label.Size = UDim2.new(1, 0, 1, 0)
+feature2Label.Text = "Enable Feature 2"
+feature2Label.TextColor3 = Color3.new(1, 1, 1)
+feature2Label.TextSize = 14
+feature2Label.BackgroundTransparency = 1
+feature2Label.Parent = feature2Checkbox
 
-        -- Klick-Event für Checkbox (wechselt Farbe bei Klick)
-        checkbox.MouseButton1Click:Connect(function()
-            if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
-                checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
-            else
-                checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
-            end
-        end)
+local feature2Toggle = Instance.new("TextButton")
+feature2Toggle.Size = UDim2.new(0, 30, 0, 30)
+feature2Toggle.Position = UDim2.new(1, -40, 0, 0)
+feature2Toggle.Text = "Off"
+feature2Toggle.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+feature2Toggle.TextColor3 = Color3.new(1, 1, 1)
+feature2Toggle.Font = Enum.Font.SourceSans
+feature2Toggle.TextSize = 14
+feature2Toggle.Parent = feature2Checkbox
+
+-- Funktion für die Buttons
+stealCarButton.MouseButton1Click:Connect(function()
+    print("Steal Car Button clicked!")
+    -- Füge die Logik für den "Steal Car"-Button hier ein
+end)
+
+carFlyButton.MouseButton1Click:Connect(function()
+    print("Car Fly Button clicked!")
+    -- Füge die Logik für den "Car Fly"-Button hier ein
+end)
+
+infiniteYieldButton.MouseButton1Click:Connect(function()
+    print("Infinite Yield Button clicked!")
+    -- Füge die Logik für den "Infinite Yield"-Button hier ein
+end)
+
+-- Funktion für die Checkboxen
+local function toggleFeature1()
+    if feature1Toggle.Text == "Off" then
+        feature1Toggle.Text = "On"
+        print("Feature 1 enabled!")
+        -- Füge die Logik für Feature 1 hier ein
+    else
+        feature1Toggle.Text = "Off"
+        print("Feature 1 disabled!")
+        -- Deaktiviert Feature 1
     end
 end
 
--- Cheat-Name anzeigen
-local cheatNameLabel = Instance.new("TextLabel")
-cheatNameLabel.Size = UDim2.new(0, 100, 1, 0)
-cheatNameLabel.Position = UDim2.new(1, -100, 0, 0) -- Rechts neben dem letzten Tab
-cheatNameLabel.Text = "Kaniflow" -- Name deines Cheats
-cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Dunkler Hintergrund
-cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255) -- Leuchtend blau
-cheatNameLabel.Font = Enum.Font.SourceSansBold
-cheatNameLabel.TextSize = 18
-cheatNameLabel.Parent = tabBar
+local function toggleFeature2()
+    if feature2Toggle.Text == "Off" then
+        feature2Toggle.Text = "On"
+        print("Feature 2 enabled!")
+        -- Füge die Logik für Feature 2 hier ein
+    else
+        feature2Toggle.Text = "Off"
+        print("Feature 2 disabled!")
+        -- Deaktiviert Feature 2
+    end
+end
+
+feature1Toggle.MouseButton1Click:Connect(toggleFeature1)
+feature2Toggle.MouseButton1Click:Connect(toggleFeature2)
