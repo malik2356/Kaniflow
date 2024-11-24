@@ -62,7 +62,7 @@ for i, tabName in ipairs(tabs) do
     if tabName == "Home" then
         buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
     end
-    
+
     for j = 1, 3 do
         local button = Instance.new("TextButton")
         button.Size = UDim2.new(0, 100, 0, 30)
@@ -78,11 +78,18 @@ for i, tabName in ipairs(tabs) do
     -- Platzhalter: Checkboxen
     local checkboxLabels = {"Checkbox 1", "Checkbox 2"} -- Beispieltexte für Checkboxen
     for k = 1, 2 do
-        local checkbox = Instance.new("Frame")
+        local checkboxFrame = Instance.new("Frame")
+        checkboxFrame.Size = UDim2.new(0, 140, 0, 20)
+        checkboxFrame.Position = UDim2.new(0, 140, 0, 20 + (k - 1) * 40)
+        checkboxFrame.BackgroundTransparency = 1
+        checkboxFrame.Parent = tabContent
+
+        local checkbox = Instance.new("TextButton")
         checkbox.Size = UDim2.new(0, 20, 0, 20)
-        checkbox.Position = UDim2.new(0, 140, 0, 20 + (k - 1) * 40)
+        checkbox.Position = UDim2.new(0, 0, 0, 0)
+        checkbox.Text = ""
         checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-        checkbox.Parent = tabContent
+        checkbox.Parent = checkboxFrame
 
         -- Klick-Event für Checkbox (wechselt Farbe bei Klick)
         checkbox.MouseButton1Click:Connect(function()
@@ -101,7 +108,7 @@ for i, tabName in ipairs(tabs) do
         label.Font = Enum.Font.SourceSans
         label.TextSize = 14
         label.BackgroundTransparency = 1
-        label.Parent = checkbox
+        label.Parent = checkboxFrame
     end
 end
 
