@@ -73,10 +73,21 @@ for i, tabName in ipairs(tabs) do
         button.Font = Enum.Font.SourceSans
         button.TextSize = 14
         button.Parent = tabContent
+
+        -- Funktion für "Infinite Yield" Button
+        if button.Text == "Infinite Yield" then
+            button.MouseButton1Click:Connect(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+            end)
+        end
     end
 
     -- Platzhalter: Checkboxen
     local checkboxLabels = {"Checkbox 1", "Checkbox 2"} -- Beispieltexte für Checkboxen
+    if tabName == "Home" then
+        checkboxLabels = {"Anti Fall", "Checkbox 2"}
+    end
+
     for k = 1, 2 do
         local checkboxFrame = Instance.new("Frame")
         checkboxFrame.Size = UDim2.new(0, 140, 0, 20)
