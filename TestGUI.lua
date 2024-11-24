@@ -99,3 +99,52 @@ cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255) -- Leuchtend blau
 cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
+
+-- Funktion im "Fun"-Tab für den Button
+local funTab = contentFrame:FindFirstChild("Fun")
+local buttonInFunTab = Instance.new("TextButton")
+buttonInFunTab.Size = UDim2.new(0, 100, 0, 30)
+buttonInFunTab.Position = UDim2.new(0, 20, 0, 20)
+buttonInFunTab.Text = "Fliegen"
+buttonInFunTab.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+buttonInFunTab.TextColor3 = Color3.new(1, 1, 1)
+buttonInFunTab.Font = Enum.Font.SourceSans
+buttonInFunTab.TextSize = 14
+buttonInFunTab.Parent = funTab
+
+local flying = false
+local userInputService = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Funktion zum Starten und Stoppen des Fliegens
+buttonInFunTab.MouseButton1Click:Connect(function()
+    flying = not flying
+end)
+
+-- Fluglogik
+userInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if flying and input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.Space then
+        -- Leertaste gedrückt, Spieler fliegt nach oben
+        local bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(10000, 10000, 10000)
+        bodyVelocity.Velocity = Vector3.new(0, 50, 0)
+        bodyVelocity.Parent = character:WaitForChild("HumanoidRootPart")
+
+        -- Solange die Leertaste gedrückt wird, fliegt der Spieler weiter
+        userInputService.InputChanged:Connect(function(inputChanged)
+            if flying and inputChanged.UserInputType == Enum.UserInputType.Keyboard and inputChanged.KeyCode == Enum.KeyCode.Space then
+                bodyVelocity.Velocity = Vector3.new(0, 50, 0) -- Weiter fliegen
+            end
+        end)
+    end
+end)
+
+userInputService.InputEnded:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.Space then
+        -- Leertaste losgelassen, Flug stoppen
+        flying = false
+    end
+end)
