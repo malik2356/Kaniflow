@@ -100,51 +100,55 @@ cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
 
--- Funktion im "Fun"-Tab für den Button
-local funTab = contentFrame:FindFirstChild("Fun")
-local buttonInFunTab = Instance.new("TextButton")
-buttonInFunTab.Size = UDim2.new(0, 100, 0, 30)
-buttonInFunTab.Position = UDim2.new(0, 20, 0, 20)
-buttonInFunTab.Text = "Fliegen"
-buttonInFunTab.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-buttonInFunTab.TextColor3 = Color3.new(1, 1, 1)
-buttonInFunTab.Font = Enum.Font.SourceSans
-buttonInFunTab.TextSize = 14
-buttonInFunTab.Parent = funTab
-
-local flying = false
-local userInputService = game:GetService("UserInputService")
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
+-- Funktion für das Fliegen
+local user = game.Players.LocalPlayer
+local character = user.Character or user.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
+local flying = false
 
--- Funktion zum Starten und Stoppen des Fliegens
-buttonInFunTab.MouseButton1Click:Connect(function()
-    flying = not flying
-end)
-
--- Fluglogik
-userInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if flying and input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.Space then
-        -- Leertaste gedrückt, Spieler fliegt nach oben
-        local bodyVelocity = Instance.new("BodyVelocity")
-        bodyVelocity.MaxForce = Vector3.new(10000, 10000, 10000)
-        bodyVelocity.Velocity = Vector3.new(0, 50, 0)
-        bodyVelocity.Parent = character:WaitForChild("HumanoidRootPart")
-
-        -- Solange die Leertaste gedrückt wird, fliegt der Spieler weiter
-        userInputService.InputChanged:Connect(function(inputChanged)
-            if flying and inputChanged.UserInputType == Enum.UserInputType.Keyboard and inputChanged.KeyCode == Enum.KeyCode.Space then
-                bodyVelocity.Velocity = Vector3.new(0, 50, 0) -- Weiter fliegen
+-- Funktion, um den Flieger zu starten
+local function startFlying()
+    if not flying then
+        flying = true
+        game:GetService("RunService").Heartbeat:Connect(function()
+            if flying then
+                humanoid.PlatformStand = true
+                humanoid:Move(Vector3.new(0, 10, 0)) -- Sanfte Aufwärtsbewegung
             end
         end)
     end
-end)
+end
 
-userInputService.InputEnded:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.Space then
-        -- Leertaste losgelassen, Flug stoppen
-        flying = false
-    end
-end)
+-- Funktion, um das Fliegen zu stoppen
+local function stopFlying()
+    flying = false
+    humanoid.PlatformStand = false
+end
+
+-- Button für die Leertaste (Fun Tab)
+local funTab = contentFrame:FindFirstChild("Fun")
+if funTab then
+    local spaceButton = Instance.new("TextButton")
+    spaceButton.Size = UDim2.new(0, 100, 0, 30)
+    spaceButton.Position = UDim2.new(0, 20, 0, 20)
+    spaceButton.Text = "Fliegen"
+    spaceButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    spaceButton.TextColor3 = Color3.new(1, 1, 1)
+    spaceButton.Font = Enum.Font.SourceSans
+    spaceButton.TextSize = 14
+    spaceButton.Parent = funTab
+
+    -- Tastenkontrolle für das Fliegen
+    local userInputService = game:GetService("UserInputService")
+    userInputService.InputBegan:Connect(function(input)
+        if input.KeyCode == Enum.KeyCode.Space then
+            startFlying() -- Fliegen starten
+        end
+    end)
+
+    userInputService.InputEnded:Connect(function(input)
+        if input.KeyCode == Enum.KeyCode.Space then
+            stopFlying() -- Fliegen stoppen
+        end
+    end)
+end
