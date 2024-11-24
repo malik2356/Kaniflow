@@ -31,6 +31,8 @@ for i, tabName in ipairs(tabs) do
     tabButton.Text = tabName
     tabButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     tabButton.TextColor3 = Color3.new(1, 1, 1)
+    tabButton.Font = Enum.Font.SourceSansBold
+    tabButton.TextSize = 18
     tabButton.Parent = tabBar
 
     -- Klick-Event für Tabs
@@ -63,6 +65,8 @@ for i, tabName in ipairs(tabs) do
         button.Text = "Button " .. j
         button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
         button.TextColor3 = Color3.new(1, 1, 1)
+        button.Font = Enum.Font.SourceSans
+        button.TextSize = 14
         button.Parent = tabContent
     end
 
@@ -74,7 +78,7 @@ for i, tabName in ipairs(tabs) do
         checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
         checkbox.Parent = tabContent
 
-        -- Optional: Klick-Event für Checkbox (wechselt Farbe bei Klick)
+        -- Klick-Event für Checkbox (wechselt Farbe bei Klick)
         checkbox.MouseButton1Click:Connect(function()
             if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
                 checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
@@ -85,59 +89,13 @@ for i, tabName in ipairs(tabs) do
     end
 end
 
--- Name des Cheats anzeigen (Wieder zurückgesetzt)
-local cheatName = Instance.new("TextLabel")
-cheatName.Size = UDim2.new(0, 200, 0, 50)
-cheatName.Position = UDim2.new(1, -210, 0, 0)
-cheatName.BackgroundTransparency = 1
-cheatName.Text = "Dein Cheat Name"  -- Hier kannst du den Namen deines Cheats anpassen
-cheatName.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Weiße Farbe
-cheatName.TextSize = 16
-cheatName.TextXAlignment = Enum.TextXAlignment.Right
-cheatName.Parent = tabBar
-
--- Steal Car Button im Home Tab hinzufügen
-local stealCarButton = Instance.new("TextButton")
-stealCarButton.Size = UDim2.new(0, 100, 0, 30)
-stealCarButton.Position = UDim2.new(0, 20, 0, 20)  -- Position für den ersten Button
-stealCarButton.Text = "Steal Car"
-stealCarButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-stealCarButton.TextColor3 = Color3.new(1, 1, 1)
-stealCarButton.Parent = contentFrame:FindFirstChild("Home") -- Stelle sicher, dass es im Home-Tab ist
-
--- Funktion, um das nächstgelegene Auto zu finden und den Spieler auf den Fahrersitz zu setzen
-stealCarButton.MouseButton1Click:Connect(function()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    local closestCar = nil
-    local closestDistance = math.huge
-
-    -- Gehe durch alle Modelle und suche nach Fahrzeugen
-    for _, vehicle in pairs(workspace:GetDescendants()) do
-        if vehicle:IsA("Model") and vehicle:FindFirstChild("DriverSeat") then
-            local driverSeat = vehicle:FindFirstChild("DriverSeat")
-            if driverSeat then
-                local seatPosition = driverSeat.Position
-                local distance = (seatPosition - humanoidRootPart.Position).Magnitude
-
-                -- Wenn das Fahrzeug näher ist als das vorige, wird es als das "nächste" Auto gesetzt
-                if distance < closestDistance then
-                    closestCar = vehicle
-                    closestDistance = distance
-                end
-            end
-        end
-    end
-
-    -- Wenn ein Auto gefunden wurde, setze den Spieler auf den Fahrersitz
-    if closestCar then
-        local driverSeat = closestCar:FindFirstChild("DriverSeat")
-        if driverSeat then
-            character:SetPrimaryPartCFrame(driverSeat.CFrame)  -- Setzt den Charakter auf den Fahrersitz
-            print("Auto gestohlen!")  -- Debug-Ausgabe, dass das Auto gestohlen wurde
-        end
-    else
-        print("Kein Auto in der Nähe gefunden.")  -- Debug-Ausgabe, wenn kein Auto gefunden wurde
-    end
-end)
+-- Cheat-Name anzeigen
+local cheatNameLabel = Instance.new("TextLabel")
+cheatNameLabel.Size = UDim2.new(0, 100, 1, 0)
+cheatNameLabel.Position = UDim2.new(1, -100, 0, 0) -- Rechts neben dem letzten Tab
+cheatNameLabel.Text = "Kaniflow" -- Name deines Cheats
+cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Dunkler Hintergrund
+cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255) -- Leuchtend blau
+cheatNameLabel.Font = Enum.Font.SourceSansBold
+cheatNameLabel.TextSize = 18
+cheatNameLabel.Parent = tabBar
