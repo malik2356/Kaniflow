@@ -126,30 +126,19 @@ local function stopFlying()
     end
 end
 
--- Button für die Leertaste (Fun Tab)
-local funTab = contentFrame:FindFirstChild("Fun")
-if funTab then
-    local spaceButton = Instance.new("TextButton")
-    spaceButton.Size = UDim2.new(0, 100, 0, 30)
-    spaceButton.Position = UDim2.new(0, 20, 0, 20)
-    spaceButton.Text = "Fliegen"
-    spaceButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-    spaceButton.TextColor3 = Color3.new(1, 1, 1)
-    spaceButton.Font = Enum.Font.SourceSans
-    spaceButton.TextSize = 14
-    spaceButton.Parent = funTab
+-- Toggle-Flugsteuerung
+local isFlying = false
 
-    -- Tastenkontrolle für das Fliegen
-    local userInputService = game:GetService("UserInputService")
-    userInputService.InputBegan:Connect(function(input)
-        if input.KeyCode == Enum.KeyCode.Space then
-            startFlying() -- Fliegen starten
-        end
-    end)
+-- Tasteneingabe für Leertaste (Toggle-Flug)
+local userInputService = game:GetService("UserInputService")
 
-    userInputService.InputEnded:Connect(function(input)
-        if input.KeyCode == Enum.KeyCode.Space then
-            stopFlying() -- Fliegen stoppen
+userInputService.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.Space then
+        if isFlying then
+            stopFlying() -- Wenn bereits in der Luft, stoppen wir den Flug
+        else
+            startFlying() -- Wenn nicht in der Luft, starten wir den Flug
         end
-    end)
-end
+        isFlying = not isFlying -- Toggle-Status
+    end
+end)
