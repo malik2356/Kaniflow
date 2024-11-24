@@ -58,7 +58,11 @@ for i, tabName in ipairs(tabs) do
     tabContent.Parent = contentFrame
 
     -- Platzhalter: Buttons
-    local buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
+    local buttonLabels = {"Button 1", "Button 2", "Button 3"}
+    if tabName == "Home" then
+        buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
+    end
+    
     for j = 1, 3 do
         local button = Instance.new("TextButton")
         button.Size = UDim2.new(0, 100, 0, 30)
@@ -74,10 +78,9 @@ for i, tabName in ipairs(tabs) do
     -- Platzhalter: Checkboxen
     local checkboxLabels = {"Checkbox 1", "Checkbox 2"} -- Beispieltexte für Checkboxen
     for k = 1, 2 do
-        local checkbox = Instance.new("TextButton")
+        local checkbox = Instance.new("Frame")
         checkbox.Size = UDim2.new(0, 20, 0, 20)
         checkbox.Position = UDim2.new(0, 140, 0, 20 + (k - 1) * 40)
-        checkbox.Text = checkboxLabels[k]
         checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
         checkbox.Parent = tabContent
 
@@ -89,6 +92,16 @@ for i, tabName in ipairs(tabs) do
                 checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
             end
         end)
+
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(0, 100, 0, 20)
+        label.Position = UDim2.new(1, 5, 0, 0)
+        label.Text = checkboxLabels[k]
+        label.TextColor3 = Color3.new(1, 1, 1)
+        label.Font = Enum.Font.SourceSans
+        label.TextSize = 14
+        label.BackgroundTransparency = 1
+        label.Parent = checkbox
     end
 end
 
