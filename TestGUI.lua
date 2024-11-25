@@ -155,16 +155,20 @@ game:GetService("RunService").Stepped:Connect(function()
                 bodyVelocity.MaxForce = Vector3.new(0, 1000, 0)
                 bodyVelocity.Parent = hrp
 
-                local bodyGyro = Instance.new("BodyGyro")
-                bodyGyro.CFrame = hrp.CFrame
-                bodyGyro.MaxTorque = Vector3.new(0, 0, 0) -- Einschränken der Rotation
-                bodyGyro.P = 1000
-                bodyGyro.Parent = hrp
-
                 task.wait(0.1) -- Kurze Wartezeit
                 bodyVelocity:Destroy()
-                bodyGyro:Destroy()
             end
+        end
+    end
+end)
+
+-- Geschwindigkeit nach oben erhöhen
+game:GetService("UserInputService").JumpRequest:Connect(function()
+    if _G.antiFallEnabled then
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = player.Character.HumanoidRootPart
+            hrp.Velocity = hrp.Velocity + Vector3.new(0, 50, 0) -- Geschwindigkeit nach oben erhöhen
         end
     end
 end)
