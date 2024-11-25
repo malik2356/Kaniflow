@@ -150,7 +150,7 @@ game:GetService("RunService").Stepped:Connect(function()
 
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
                 local bodyVelocity = Instance.new("BodyVelocity")
-                bodyVelocity.Velocity = Vector3.new(0, -5, 0) -- Langsames Fallen
+                bodyVelocity.Velocity = Vector3.new(0, -10, 0) -- Langsames Fallen
                 bodyVelocity.P = 1000
                 bodyVelocity.MaxForce = Vector3.new(0, 1000, 0)
                 bodyVelocity.Parent = hrp
