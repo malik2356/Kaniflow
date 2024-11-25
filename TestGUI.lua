@@ -147,10 +147,16 @@ game:GetService("RunService").Stepped:Connect(function()
         if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
             local hrp = player.Character.HumanoidRootPart
             local humanoid = player.Character.Humanoid
+
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, -10, hrp.Velocity.Z) -- Langsames Fallen
-            else
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z) -- Geschwindigkeit wieder normalisieren
+                local bodyVelocity = Instance.new("BodyVelocity")
+                bodyVelocity.Velocity = Vector3.new(0, -5, 0) -- Langsames Fallen
+                bodyVelocity.P = 1000
+                bodyVelocity.MaxForce = Vector3.new(0, 1000, 0)
+                bodyVelocity.Parent = hrp
+
+                task.wait(0.1) -- Kurze Wartezeit
+                bodyVelocity:Destroy()
             end
         end
     end
