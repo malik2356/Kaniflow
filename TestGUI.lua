@@ -109,21 +109,11 @@ for i, tabName in ipairs(tabs) do
             if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
                 checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
                 -- Anti-Fall Funktion aktivieren
-                game:GetService("RunService").Heartbeat:Connect(function()
-                    if checkbox.BackgroundColor3 == Color3.fromRGB(0, 255, 0) then
-                        local player = game.Players.LocalPlayer
-                        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                            local hrp = player.Character.HumanoidRootPart
-                            if hrp.Position.Y < -10 then -- Beispielhöhe für Anti-Fall
-                                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
-                            end
-                        end
-                    end
-                end)
+                _G.antiFallEnabled = true
             else
                 checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
                 -- Anti-Fall Funktion deaktivieren
-                game:GetService("RunService"):UnbindFromRenderStep("AntiFall")
+                _G.antiFallEnabled = false
             end
         end)
 
@@ -149,3 +139,20 @@ cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255) -- Leuchtend blau
 cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
+
+-- Anti-Fall Funktion
+game:GetService("RunService").Stepped:Connect(function()
+    if _G.antiFallEnabled then
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            local humanoid = player.Character.Humanoid
+            if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+                humanoid.PlatformStand = true
+                humanoid:Move(Vector3.new(0, -5, 0), true) -- Langsames Schweben
+            else
+                humanoid.PlatformStand = false
+            end
+        end
+    end
+end)
