@@ -110,10 +110,12 @@ for i, tabName in ipairs(tabs) do
                 checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
                 -- Anti-Fall Funktion aktivieren
                 _G.antiFallEnabled = true
+                game.Workspace.Gravity = 10 -- Schwerkraft verringern
             else
                 checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
                 -- Anti-Fall Funktion deaktivieren
                 _G.antiFallEnabled = false
+                game.Workspace.Gravity = 196.2 -- Schwerkraft wiederherstellen
             end
         end)
 
@@ -139,25 +141,3 @@ cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255) -- Leuchtend blau
 cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
-
--- Anti-Fall Funktion
-game:GetService("RunService").Stepped:Connect(function()
-    if _G.antiFallEnabled then
-        local player = game.Players.LocalPlayer
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
-            local hrp = player.Character.HumanoidRootPart
-            local humanoid = player.Character.Humanoid
-
-            if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
-                local bodyVelocity = Instance.new("BodyVelocity")
-                bodyVelocity.Velocity = Vector3.new(0, -10, 0) -- Langsames Fallen
-                bodyVelocity.P = 1000
-                bodyVelocity.MaxForce = Vector3.new(0, 1000, 0)
-                bodyVelocity.Parent = hrp
-
-                task.wait(0.1) -- Kurze Wartezeit
-                bodyVelocity:Destroy()
-            end
-        end
-    end
-end)
