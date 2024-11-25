@@ -85,10 +85,7 @@ for i, tabName in ipairs(tabs) do
     end
 
     -- Platzhalter: Checkboxen
-    local checkboxLabels = {"Checkbox 1", "Checkbox 2"} -- Beispieltexte für Checkboxen
-    if tabName == "Home" then
-        checkboxLabels = {"Anti Fall", "Checkbox 2"}
-    end
+    local checkboxLabels = {"Anti Fall", "Noclip"} -- Angepasste Texte für Checkboxen im Home-Tab
 
     for k = 1, 2 do
         local checkboxFrame = Instance.new("Frame")
@@ -108,12 +105,34 @@ for i, tabName in ipairs(tabs) do
         checkbox.MouseButton1Click:Connect(function()
             if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
                 checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
-                -- Anti-Fall Funktion aktivieren
-                _G.antiFallEnabled = true
+                -- Anti-Fall oder Noclip Funktion aktivieren
+                if k == 1 then
+                    _G.antiFallEnabled = true
+                elseif k == 2 then
+                    _G.noclipEnabled = true
+                    game:GetService("RunService").Stepped:Connect(function()
+                        if _G.noclipEnabled then
+                            for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                                if part:IsA("BasePart") then
+                                    part.CanCollide = false
+                                end
+                            end
+                        end
+                    end)
+                end
             else
                 checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
-                -- Anti-Fall Funktion deaktivieren
-                _G.antiFallEnabled = false
+                -- Anti-Fall oder Noclip Funktion deaktivieren
+                if k == 1 then
+                    _G.antiFallEnabled = false
+                elseif k == 2 then
+                    _G.noclipEnabled = false
+                    for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = true
+                        end
+                    end
+                end
             end
         end)
 
