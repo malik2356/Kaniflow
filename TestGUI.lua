@@ -140,7 +140,7 @@ cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
 
--- Anti-Fall Funktion
+-- Neuer Anti-Fall Ansatz
 game:GetService("RunService").Stepped:Connect(function()
     if _G.antiFallEnabled then
         local player = game.Players.LocalPlayer
@@ -149,14 +149,8 @@ game:GetService("RunService").Stepped:Connect(function()
             local humanoid = player.Character.Humanoid
 
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
-                local bodyVelocity = Instance.new("BodyVelocity")
-                bodyVelocity.Velocity = Vector3.new(0, -3 + math.random() * -2, 0) -- Sehr langsames Fallen mit zufälligen Variationen
-                bodyVelocity.P = 500
-                bodyVelocity.MaxForce = Vector3.new(0, 500, 0)
-                bodyVelocity.Parent = hrp
-
-                task.wait(0.2 + math.random() * 0.1) -- Leichte Randomisierung der Wartezeit
-                bodyVelocity:Destroy()
+                local currentVel = hrp.Velocity
+                hrp.Velocity = Vector3.new(currentVel.X, math.min(currentVel.Y, -10), currentVel.Z) -- Verringert die Fallgeschwindigkeit
             end
         end
     end
