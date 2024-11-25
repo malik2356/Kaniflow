@@ -108,9 +108,11 @@ for i, tabName in ipairs(tabs) do
         checkbox.MouseButton1Click:Connect(function()
             if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
                 checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
+                -- Anti-Fall Funktion aktivieren
                 _G.antiFallEnabled = true
             else
                 checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
+                -- Anti-Fall Funktion deaktivieren
                 _G.antiFallEnabled = false
             end
         end)
@@ -147,35 +149,15 @@ game:GetService("RunService").Stepped:Connect(function()
             local humanoid = player.Character.Humanoid
 
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
-                if not workspace:FindFirstChild("AntiFallPlatform") then
-                    local platform = Instance.new("Part")
-                    platform.Name = "AntiFallPlatform"
-                    platform.Size = Vector3.new(10, 1, 10)
-                    platform.Position = hrp.Position - Vector3.new(0, 5, 0) -- Plattform unter dem Spieler erzeugen
-                    platform.Anchored = true
-                    platform.Parent = workspace
+                local bodyVelocity = Instance.new("BodyVelocity")
+                bodyVelocity.Velocity = Vector3.new(0, -5, 0) -- Langsames Fallen
+                bodyVelocity.P = 1000
+                bodyVelocity.MaxForce = Vector3.new(0, 1000, 0)
+                bodyVelocity.Parent = hrp
 
-                    -- Plattformbewegung
-                    game:GetService("RunService").RenderStepped:Connect(function()
-                        if _G.antiFallEnabled and platform and platform.Parent then
-                            platform.Position = platform.Position - Vector3.new(0, 0.1, 0) -- Plattform langsam nach unten bewegen
-                        else
-                            platform:Destroy()
-                        end
-                    end)
-                else
-                    local platform = workspace:FindFirstChild("AntiFallPlatform")
-                    platform.Position = hrp.Position - Vector3.new(0, 5, 0) -- Plattform unter dem Spieler aktualisieren
-                end
-            else
-                if workspace:FindFirstChild("AntiFallPlatform") then
-                    workspace:FindFirstChild("AntiFallPlatform"):Destroy()
-                end
+                task.wait(0.1) -- Kurze Wartezeit
+                bodyVelocity:Destroy()
             end
-        end
-    else
-        if workspace:FindFirstChild("AntiFallPlatform") then
-            workspace:FindFirstChild("AntiFallPlatform"):Destroy()
         end
     end
 end)
