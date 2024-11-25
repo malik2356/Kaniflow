@@ -150,12 +150,12 @@ game:GetService("RunService").Stepped:Connect(function()
 
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
                 local bodyVelocity = Instance.new("BodyVelocity")
-                bodyVelocity.Velocity = Vector3.new(0, -5, 0) -- Langsames Fallen
-                bodyVelocity.P = 1000
-                bodyVelocity.MaxForce = Vector3.new(0, 1000, 0)
+                bodyVelocity.Velocity = Vector3.new(0, -3 + math.random() * -2, 0) -- Sehr langsames Fallen mit zufälligen Variationen
+                bodyVelocity.P = 500
+                bodyVelocity.MaxForce = Vector3.new(0, 500, 0)
                 bodyVelocity.Parent = hrp
 
-                task.wait(0.1) -- Kurze Wartezeit
+                task.wait(0.2 + math.random() * 0.1) -- Leichte Randomisierung der Wartezeit
                 bodyVelocity:Destroy()
             end
         end
