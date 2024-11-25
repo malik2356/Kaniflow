@@ -155,13 +155,17 @@ game:GetService("RunService").Stepped:Connect(function()
                     platform.Anchored = true
                     platform.Parent = workspace
 
+                    -- Plattformbewegung
                     game:GetService("RunService").RenderStepped:Connect(function()
-                        if _G.antiFallEnabled and workspace:FindFirstChild("AntiFallPlatform") then
+                        if _G.antiFallEnabled and platform and platform.Parent then
                             platform.Position = platform.Position - Vector3.new(0, 0.1, 0) -- Plattform langsam nach unten bewegen
                         else
                             platform:Destroy()
                         end
                     end)
+                else
+                    local platform = workspace:FindFirstChild("AntiFallPlatform")
+                    platform.Position = hrp.Position - Vector3.new(0, 5, 0) -- Plattform unter dem Spieler aktualisieren
                 end
             else
                 if workspace:FindFirstChild("AntiFallPlatform") then
