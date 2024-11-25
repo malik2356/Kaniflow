@@ -110,12 +110,10 @@ for i, tabName in ipairs(tabs) do
                 checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
                 -- Anti-Fall Funktion aktivieren
                 _G.antiFallEnabled = true
-                game.Workspace.Gravity = 10 -- Schwerkraft verringern
             else
                 checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
                 -- Anti-Fall Funktion deaktivieren
                 _G.antiFallEnabled = false
-                game.Workspace.Gravity = 196.2 -- Schwerkraft wiederherstellen
             end
         end)
 
@@ -141,3 +139,17 @@ cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255) -- Leuchtend blau
 cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
+
+-- Anti-Fall Funktion
+game:GetService("RunService").Stepped:Connect(function()
+    if _G.antiFallEnabled then
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            local humanoid = player.Character.Humanoid
+
+            if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                humanoid:ChangeState(Enum.HumanoidStateType.Swimming) -- Zustand auf Schwimmen ändern, um langsames Fallen zu simulieren
+            end
+        end
+    end
+end)
