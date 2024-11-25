@@ -147,11 +147,31 @@ game:GetService("RunService").Stepped:Connect(function()
             local humanoid = player.Character.Humanoid
 
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
-                humanoid.PlatformStand = true -- Verhindert Fallschaden
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, math.min(hrp.Velocity.Y, -10), hrp.Velocity.Z) -- Verlangsamt das Fallen
+                if not workspace:FindFirstChild("AntiFallPlatform") then
+                    local platform = Instance.new("Part")
+                    platform.Name = "AntiFallPlatform"
+                    platform.Size = Vector3.new(10, 1, 10)
+                    platform.Position = hrp.Position - Vector3.new(0, 5, 0) -- Plattform unter dem Spieler erzeugen
+                    platform.Anchored = true
+                    platform.Parent = workspace
+
+                    game:GetService("RunService").RenderStepped:Connect(function()
+                        if _G.antiFallEnabled and workspace:FindFirstChild("AntiFallPlatform") then
+                            platform.Position = platform.Position - Vector3.new(0, 0.1, 0) -- Plattform langsam nach unten bewegen
+                        else
+                            platform:Destroy()
+                        end
+                    end)
+                end
             else
-                humanoid.PlatformStand = false
+                if workspace:FindFirstChild("AntiFallPlatform") then
+                    workspace:FindFirstChild("AntiFallPlatform"):Destroy()
+                end
             end
+        end
+    else
+        if workspace:FindFirstChild("AntiFallPlatform") then
+            workspace:FindFirstChild("AntiFallPlatform"):Destroy()
         end
     end
 end)
