@@ -108,31 +108,10 @@ for i, tabName in ipairs(tabs) do
         checkbox.MouseButton1Click:Connect(function()
             if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
                 checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
-                -- Anti-Fall Funktion aktivieren
                 _G.antiFallEnabled = true
-                player = game.Players.LocalPlayer
-                if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                    hrp = player.Character.HumanoidRootPart
-                    -- Hinzufügen eines BodyVelocity nur zum langsamen Fallen
-                    if not hrp:FindFirstChild("FallControl") then
-                        local bodyVelocity = Instance.new("BodyVelocity", hrp)
-                        bodyVelocity.Name = "FallControl"
-                        bodyVelocity.Velocity = Vector3.new(0, -20, 0) -- Leichtes langsames Fallen
-                        bodyVelocity.MaxForce = Vector3.new(0, 1250, 0)
-                    end
-                end
             else
                 checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
-                -- Anti-Fall Funktion deaktivieren
                 _G.antiFallEnabled = false
-                player = game.Players.LocalPlayer
-                if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                    hrp = player.Character.HumanoidRootPart
-                    -- Entfernen des BodyVelocity, wenn es existiert
-                    if hrp:FindFirstChild("FallControl") then
-                        hrp:FindFirstChild("FallControl"):Destroy()
-                    end
-                end
             end
         end)
 
@@ -158,3 +137,21 @@ cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255) -- Leuchtend blau
 cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
+
+-- Anti-Fall Funktion
+game:GetService("RunService").Stepped:Connect(function()
+    if _G.antiFallEnabled then
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
+            local hrp = player.Character.HumanoidRootPart
+            local humanoid = player.Character.Humanoid
+
+            if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                humanoid.PlatformStand = true -- Verhindert Fallschaden
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, math.min(hrp.Velocity.Y, -10), hrp.Velocity.Z) -- Verlangsamt das Fallen
+            else
+                humanoid.PlatformStand = false
+            end
+        end
+    end
+end)
