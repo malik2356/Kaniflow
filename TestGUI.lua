@@ -144,14 +144,13 @@ cheatNameLabel.Parent = tabBar
 game:GetService("RunService").Stepped:Connect(function()
     if _G.antiFallEnabled then
         local player = game.Players.LocalPlayer
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
+            local hrp = player.Character.HumanoidRootPart
             local humanoid = player.Character.Humanoid
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
-                humanoid:ChangeState(Enum.HumanoidStateType.Physics)
-                humanoid.PlatformStand = true
-                humanoid:Move(Vector3.new(0, -5, 0), true) -- Langsames Schweben
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, -10, hrp.Velocity.Z) -- Langsames Fallen
             else
-                humanoid.PlatformStand = false
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z) -- Geschwindigkeit wieder normalisieren
             end
         end
     end
