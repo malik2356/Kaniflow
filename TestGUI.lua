@@ -87,7 +87,7 @@ for i, tabName in ipairs(tabs) do
     -- Platzhalter: Checkboxen
     local checkboxLabels = {"Checkbox 1", "Checkbox 2"} -- Beispieltexte für Checkboxen
     if tabName == "Home" then
-        checkboxLabels = {"Anti Fall", "Checkbox 2"}
+        checkboxLabels = {"Anti Fall", "Noclip"}
     end
 
     for k = 1, 2 do
@@ -108,12 +108,30 @@ for i, tabName in ipairs(tabs) do
         checkbox.MouseButton1Click:Connect(function()
             if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
                 checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
-                -- Anti-Fall Funktion aktivieren
-                _G.antiFallEnabled = true
+                -- Noclip Funktion aktivieren
+                if checkbox.Parent.Parent.Name == "Home" and checkbox.Parent:GetSiblingIndex() == 1 then
+                    _G.antiFallEnabled = true
+                elseif checkbox.Parent.Parent.Name == "Home" and checkbox.Parent:GetSiblingIndex() == 2 then
+                    _G.noclipEnabled = true
+                    for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = false
+                        end
+                    end
+                end
             else
                 checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
-                -- Anti-Fall Funktion deaktivieren
-                _G.antiFallEnabled = false
+                -- Noclip Funktion deaktivieren
+                if checkbox.Parent.Parent.Name == "Home" and checkbox.Parent:GetSiblingIndex() == 1 then
+                    _G.antiFallEnabled = false
+                elseif checkbox.Parent.Parent.Name == "Home" and checkbox.Parent:GetSiblingIndex() == 2 then
+                    _G.noclipEnabled = false
+                    for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = true
+                        end
+                    end
+                end
             end
         end)
 
