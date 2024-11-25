@@ -144,11 +144,26 @@ cheatNameLabel.Parent = tabBar
 game:GetService("RunService").Stepped:Connect(function()
     if _G.antiFallEnabled then
         local player = game.Players.LocalPlayer
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
+            local hrp = player.Character.HumanoidRootPart
             local humanoid = player.Character.Humanoid
 
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
-                humanoid:ChangeState(Enum.HumanoidStateType.Swimming) -- Zustand auf Schwimmen ändern, um langsames Fallen zu simulieren
+                local bodyVelocity = Instance.new("BodyVelocity")
+                bodyVelocity.Velocity = Vector3.new(0, -5, 0) -- Langsames Fallen
+                bodyVelocity.P = 1000
+                bodyVelocity.MaxForce = Vector3.new(0, 1000, 0)
+                bodyVelocity.Parent = hrp
+
+                local bodyGyro = Instance.new("BodyGyro")
+                bodyGyro.CFrame = hrp.CFrame
+                bodyGyro.MaxTorque = Vector3.new(0, 0, 0) -- Einschränken der Rotation
+                bodyGyro.P = 1000
+                bodyGyro.Parent = hrp
+
+                task.wait(0.1) -- Kurze Wartezeit
+                bodyVelocity:Destroy()
+                bodyGyro:Destroy()
             end
         end
     end
