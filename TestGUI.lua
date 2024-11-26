@@ -165,11 +165,23 @@ for i, tabName in ipairs(tabs) do
             if enterPressed then
                 local speed = tonumber(textBox.Text)
                 if speed then
-                    local player = game.Players.LocalPlayer
-                    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-                        player.Character.Humanoid.WalkSpeed = speed
-                        print("Run speed set to:", speed)
-                    end
+                    _G.targetSpeed = speed
+                    _G.currentSpeed = game.Players.LocalPlayer.Character.Humanoid.WalkSpeed
+                    _G.speedIncrement = (_G.targetSpeed - _G.currentSpeed) / 100
+                    _G.speedEnabled = true
+
+                    game:GetService("RunService").Stepped:Connect(function()
+                        if _G.speedEnabled then
+                            local player = game.Players.LocalPlayer
+                            if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+                                _G.currentSpeed = _G.currentSpeed + _G.speedIncrement
+                                player.Character:SetPrimaryPartCFrame(player.Character.PrimaryPart.CFrame + player.Character.PrimaryPart.CFrame.LookVector * (_G.speedIncrement / 10))
+                                if math.abs(_G.currentSpeed - _G.targetSpeed) < math.abs(_G.speedIncrement) then
+                                    _G.speedEnabled = false
+                                end
+                            end
+                        end
+                    end)
                 end
             end
         end)
@@ -185,7 +197,7 @@ cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
 cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
-    cheatNameLabel.Parent = tabBar
+cheatNameLabel.Parent = tabBar
 
 -- Neuer Anti-Fall Ansatz
 game:GetService("RunService").Stepped:Connect(function()
