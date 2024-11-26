@@ -177,7 +177,7 @@ for i, tabName in ipairs(tabs) do
         label.TextColor3 = Color3.new(1, 1, 1)
         label.Font = Enum.Font.SourceSans
         label.TextSize = 14
-        label.BackgroundTransparency = 1
+                label.BackgroundTransparency = 1
         label.Parent = checkboxFrame
     end
 end
