@@ -60,9 +60,9 @@ for i, tabName in ipairs(tabs) do
     tabContent.Parent = contentFrame
 
     -- Platzhalter: Buttons
-    local buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
-    if tabName ~= "Home" then
-        buttonLabels = {"Button 1", "Button 2", "Button 3"}
+    local buttonLabels = {"Button 1", "Button 2", "Button 3"}
+    if tabName == "Home" then
+        buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
     end
 
     for j = 1, 3 do
@@ -76,38 +76,7 @@ for i, tabName in ipairs(tabs) do
         button.TextSize = 14
         button.Parent = tabContent
 
-        -- Funktion für "Steal Car" Button
-        if button.Text == "Steal Car" then
-            button.MouseButton1Click:Connect(function()
-                local player = game.Players.LocalPlayer
-                local character = player.Character
-                local hrp = character:WaitForChild("HumanoidRootPart")
-                local closestSeat
-                local closestDistance = math.huge
-
-                -- Suchen des nächstgelegenen VehicleSeats oder DriverSeats
-                for _, obj in pairs(workspace:GetDescendants()) do
-                    if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
-                        local distance = (obj.Position - hrp.Position).Magnitude
-                        if distance < closestDistance then
-                            closestDistance = distance
-                            closestSeat = obj
-                        end
-                    end
-                end
-
-                -- Spieler in den nächst gelegenen Sitz setzen
-                if closestSeat then
-                    hrp.CFrame = closestSeat.CFrame
-                    character.Humanoid.Sit = true
-                    print("Player seated in the closest vehicle seat.")
-                else
-                    print("No vehicle seat found nearby.")
-                end
-            end)
-        end
-
-        -- Andere Buttons
+        -- Funktion für "Infinite Yield" Button
         if button.Text == "Infinite Yield" then
             button.MouseButton1Click:Connect(function()
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
@@ -116,7 +85,7 @@ for i, tabName in ipairs(tabs) do
     end
 
     -- Platzhalter: Checkboxen
-    local checkboxLabels = {"Anti Fall", "Noclip"}
+    local checkboxLabels = {"Anti Fall", "Noclip"} -- Angepasste Texte für Checkboxen im Home-Tab
 
     for k = 1, 2 do
         local checkboxFrame = Instance.new("Frame")
@@ -195,11 +164,14 @@ game:GetService("RunService").Stepped:Connect(function()
     if _G.antiFallEnabled then
         local player = game.Players.LocalPlayer
         if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
-            local humanoidRootPart = player.Character.H umanoidRootPart
-            
-            -- Spieler wieder auf den Boden setzen, wenn sie fallen
-            if humanoidRootPart.Position.Y < 0 then
-                humanoidRootPart.Position = Vector3.new(humanoidRootPart.Position.X, 0, humanoidRootPart.Position.Z)
+            local hrp = player.Character.HumanoidRootPart
+            local humanoid = player.Character.Humanoid
+
+            if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                humanoid.PlatformStand = true -- Verhindert Fallschaden
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, -5, hrp.Velocity.Z) -- Verlangsamt das Fallen
+            else
+                humanoid.PlatformStand = false
             end
         end
     end
