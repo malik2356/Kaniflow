@@ -96,7 +96,7 @@ for i, tabName in ipairs(tabs) do
                     end
                 end
 
-                -- Spieler in den nächst gelegenen Sitz setzen
+                -- Spieler in den nächstgelegenen Sitz setzen
                 if closestSeat then
                     hrp.CFrame = closestSeat.CFrame
                     character.Humanoid.Sit = true
@@ -194,12 +194,21 @@ cheatNameLabel.Parent = tabBar
 game:GetService("RunService").Stepped:Connect(function()
     if _G.antiFallEnabled then
         local player = game.Players.LocalPlayer
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
-            local humanoidRootPart = player.Character.H umanoidRootPart
-            
-            -- Spieler wieder auf den Boden setzen, wenn sie fallen
-            if humanoidRootPart.Position.Y < 0 then
-                humanoidRootPart.Position = Vector3.new(humanoidRootPart.Position.X, 0, humanoidRootPart.Position.Z)
+        if player.Character and player.Character :FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
+            local humanoid = player.Character.Humanoid
+            local hrp = player.Character.HumanoidRootPart
+            local velocity = hrp.Velocity
+            local ray = Ray.new(hrp.Position, Vector3.down * 10)
+            local rayResult = workspace:FindPartOnRay(ray)
+            if rayResult then
+                local distance = (hrp.Position - rayResult.Position).Magnitude
+                if distance > 5 then
+                    humanoid.JumpPower = 50
+                    humanoid.Jump()
+                end
+            else
+                humanoid.JumpPower = 50
+                humanoid.Jump()
             end
         end
     end
