@@ -85,7 +85,7 @@ for i, tabName in ipairs(tabs) do
                             local distance = (obj.Position - hrp.Position).Magnitude
                             if distance < closestDistance then
                                 closestDistance = distance
-                                closestSeat = obj
+                                closest Seat = obj
                             end
                         end
                     end
@@ -165,23 +165,17 @@ for i, tabName in ipairs(tabs) do
             if enterPressed then
                 local speed = tonumber(textBox.Text)
                 if speed then
-                    _G.targetSpeed = speed
-                    _G.currentSpeed = game.Players.LocalPlayer.Character.Humanoid.WalkSpeed
-                    _G.speedIncrement = (_G.targetSpeed - _G.currentSpeed) / 100
-                    _G.speedEnabled = true
-
-                    game:GetService("RunService").Stepped:Connect(function()
-                        if _G.speedEnabled then
-                            local player = game.Players.LocalPlayer
-                            if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-                                _G.currentSpeed = _G.currentSpeed + _G.speedIncrement
-                                player.Character:SetPrimaryPartCFrame(player.Character.PrimaryPart.CFrame + player.Character.PrimaryPart.CFrame.LookVector * (_G.speedIncrement / 10))
-                                if math.abs(_G.currentSpeed - _G.targetSpeed) < math.abs(_G.speedIncrement) then
-                                    _G.speedEnabled = false
-                                end
+                    local player = game.Players.LocalPlayer
+                    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+                        local humanoid = player.Character.Humanoid
+                        game:GetService("RunService").Stepped:Connect(function()
+                            if humanoid and humanoid.Health > 0 then
+                                local direction = humanoid.MoveDirection
+                                humanoid.RootPart.Velocity = direction * speed
                             end
-                        end
-                    end)
+                        end)
+                        print("Run speed set to:", speed)
+                    end
                 end
             end
         end)
@@ -195,7 +189,7 @@ cheatNameLabel.Position = UDim2.new(1, -100, 0, 0)
 cheatNameLabel.Text = "Kaniflow"
 cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
-cheatNameLabel.Font = Enum.Font.SourceSansBold
+che atNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
 
@@ -222,3 +216,5 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
+
+gui.Enabled = true
