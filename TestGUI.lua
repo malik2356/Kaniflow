@@ -87,7 +87,7 @@ if button.Text == "Steal Car" then
 
         -- Suchen des nächstgelegenen VehicleSeats oder DriverSeats
         for _, obj in pairs(workspace:GetDescendants()) do
-            if (obj:IsA("VehicleSeat") or obj:IsA("Seat")) and obj.Occupant == nil then
+            if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
                 local distance = (obj.Position - hrp.Position).Magnitude
                 if distance < closestDistance then
                     closestDistance = distance
@@ -98,27 +98,16 @@ if button.Text == "Steal Car" then
 
         -- Spieler in den nächstgelegenen Sitz setzen
         if closestSeat then
-            -- Setzen des Humanoid auf Sitzen
-            character.HumanoidRootPart.CFrame = closestSeat.CFrame
+            -- Setze den Spieler in den Sitz
+            closestSeat.Occupant = character.Humanoid
+            hrp.CFrame = closestSeat.CFrame
             character.Humanoid.Sit = true
-            
-            -- Warten, bis der Spieler im Sitz ist
-            wait(0.1)  -- Kurze Wartezeit, um sicherzustellen, dass die Animation spielt
-
-            -- Setzen des Humanoid auf den Fahrzeug- oder Fahrersitz
-            if closestSeat:IsA("VehicleSeat") then
-                closestSeat.Occupant = character.Humanoid
-            else
-                closestSeat.Occupant = character.Humanoid
-            end
-
             print("Player seated in the closest vehicle seat.")
         else
             print("No vehicle seat found nearby.")
         end
     end)
 end
-
         -- Andere Buttons
         if button.Text == "Infinite Yield" then
             button.MouseButton1Click:Connect(function()
