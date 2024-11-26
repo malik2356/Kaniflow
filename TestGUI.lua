@@ -23,7 +23,6 @@ contentFrame.Position = UDim2.new(0, 0, 0, 50)
 contentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 contentFrame.Parent = mainFrame
 
--- Tabs und Inhalte
 local tabs = {"Home", "Settings", "Fun"} -- Beispiel-Reiter
 
 for i, tabName in ipairs(tabs) do
@@ -37,25 +36,21 @@ for i, tabName in ipairs(tabs) do
     tabButton.TextSize = 18
     tabButton.Parent = tabBar
 
-    -- Klick-Event für Tabs
     tabButton.MouseButton1Click:Connect(function()
-        -- Alle Inhalte verstecken
         for _, child in pairs(contentFrame:GetChildren()) do
             child.Visible = false
         end
 
-        -- Inhalt für diesen Tab anzeigen (falls existiert)
         local tabContent = contentFrame:FindFirstChild(tabName)
         if tabContent then
             tabContent.Visible = true
         end
     end)
 
-    -- Inhaltsbereich für den Tab
     local tabContent = Instance.new("Frame")
     tabContent.Name = tabName
     tabContent.Size = UDim2.new(1, 0, 1, 0)
-    tabContent.Visible = (i == 1) -- Nur der erste Tab ist sichtbar
+    tabContent.Visible = (i == 1)
     tabContent.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     tabContent.Parent = contentFrame
 
@@ -76,46 +71,37 @@ for i, tabName in ipairs(tabs) do
         button.TextSize = 14
         button.Parent = tabContent
 
-        -- Funktion für "Car Fly" Button
-        if button.Text == "Car Fly" then
+        if button.Text == "Steal Car" then
             button.MouseButton1Click:Connect(function()
                 local player = game.Players.LocalPlayer
                 local character = player.Character
                 local hrp = character:WaitForChild("HumanoidRootPart")
-                local closestVehicle
+                local closestSeat
                 local closestDistance = math.huge
 
-                -- Suchen des nächstgelegenen Fahrzeugs
                 for _, obj in pairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and obj:FindFirstChild("VehicleSeat") then
-                        local distance = (obj.VehicleSeat.Position - hrp.Position).Magnitude
-                        if distance < closestDistance then
-                            closestDistance = distance
-                            closestVehicle = obj
+                    if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
+                        if obj.Parent:IsA("Model") and obj.Parent:FindFirstChild("Humanoid") == nil then
+                            local distance = (obj.Position - hrp.Position).Magnitude
+                            if distance < closestDistance then
+                                closestDistance = distance
+                                closestSeat = obj
+                            end
                         end
                     end
                 end
 
-                -- Schwerkraft des Fahrzeugs ändern
-                if closestVehicle then
-                    local bodyGyro = Instance.new("BodyGyro")
-                    bodyGyro.MaxTorque = Vector3.new(400000, 400000, 400000)
-                    bodyGyro.P = 3000
-                    bodyGyro.Parent = closestVehicle.PrimaryPart
-
-                    local bodyVelocity = Instance.new("BodyVelocity")
-                    bodyVelocity.Velocity = Vector3.new(0, 50, 0) -- Geschwindigkeit nach oben
-                    bodyVelocity.MaxForce = Vector3.new(400000, 400000, 400000)
-                    bodyVelocity.Parent = closestVehicle.PrimaryPart
-
-                    print("Vehicle is now flying.")
+                if closestSeat and closestSeat:IsA("VehicleSeat") then
+                    hrp.CFrame = closestSeat.CFrame
+                    wait(0.1)
+                    closestSeat:Sit(character.Humanoid)
+                    print("Player seated in the closest vehicle seat.")
                 else
-                    print("No vehicle found nearby.")
+                    print("No vehicle seat found nearby.")
                 end
             end)
         end
 
-        -- Andere Buttons
         if button.Text == "Infinite Yield" then
             button.MouseButton1Click:Connect(function()
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
@@ -123,13 +109,10 @@ for i, tabName in ipairs(tabs) do
         end
     end
 
-    -- Platzhalter: Checkboxen
-    local checkboxLabels = {"Anti Fall", "Noclip"}
-
-    for k = 1, 2 do
+    if tabName == "Settings" then
         local checkboxFrame = Instance.new("Frame")
         checkboxFrame.Size = UDim2.new(0, 140, 0, 20)
-        checkboxFrame.Position = UDim2.new(0, 140, 0, 20 + (k - 1) * 40)
+        checkboxFrame.Position = UDim2.new(0, 140, 0, 20)
         checkboxFrame.BackgroundTransparency = 1
         checkboxFrame.Parent = tabContent
 
@@ -140,62 +123,68 @@ for i, tabName in ipairs(tabs) do
         checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
         checkbox.Parent = checkboxFrame
 
-        -- Klick-Event für Checkbox (wechselt Farbe bei Klick)
-        checkbox.MouseButton1Click:Connect(function()
-            if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
-                checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
-                -- Anti-Fall oder Noclip Funktion aktivieren
-                if k == 1 then
-                    _G.antiFallEnabled = true
-                elseif k == 2 then
-                    _G.noclipEnabled = true
-                    game:GetService("RunService").Stepped:Connect(function()
-                        if _G.noclipEnabled then
-                            for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-                                if part:IsA("BasePart") then
-                                    part.CanCollide = false
-                                end
-                            end
-                        end
-                    end)
-                end
-            else
-                checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
-                -- Anti-Fall oder Noclip Funktion deaktivieren
-                if k == 1 then
-                    _G.antiFallEnabled = false
-                elseif k == 2 then
-                    _G.noclipEnabled = false
-                    for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-                        if part:IsA("BasePart") then
-                            part.CanCollide = true
-                        end
-                    end
-                end
-            end
-        end)
-
         local label = Instance.new("TextLabel")
         label.Size = UDim2.new(0, 100, 0, 20)
         label.Position = UDim2.new(1, 5, 0, 0)
-        label.Text = checkboxLabels[k]
+        label.Text = "Run Speed"
         label.TextColor3 = Color3.new(1, 1, 1)
         label.Font = Enum.Font.SourceSans
         label.TextSize = 14
         label.BackgroundTransparency = 1
         label.Parent = checkboxFrame
+
+        local inputFrame = Instance.new("Frame")
+        inputFrame.Size = UDim2.new(0, 100, 0, 30)
+        inputFrame.Position = UDim2.new(0, 140, 0, 50)
+        inputFrame.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+        inputFrame.Parent = tabContent
+        inputFrame.Visible = false
+
+        local textBox = Instance.new("TextBox")
+        textBox.Size = UDim2.new(1, 0, 1, 0)
+        textBox.Position = UDim2.new(0, 0, 0, 0)
+        textBox.Text = "Enter speed"
+        textBox.ClearTextOnFocus = true
+        textBox.Font = Enum.Font.SourceSans
+        textBox.TextSize = 14
+        textBox.TextColor3 = Color3.new(1, 1, 1)
+        textBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        textBox.Parent = inputFrame
+
+        checkbox.MouseButton1Click:Connect(function()
+            if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
+                checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                inputFrame.Visible = true
+            else
+                checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
+                inputFrame.Visible = false
+            end
+        end)
+
+        textBox.FocusLost:Connect(function(enterPressed)
+            if enterPressed then
+                local speed = tonumber(textBox.Text)
+                if speed then
+                    local player = game.Players.LocalPlayer
+                    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+                        player.Character.Humanoid.WalkSpeed = speed
+                        print("Run speed set to:", speed)
+                    end
+                end
+            end
+        end)
     end
 end
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
 cheatNameLabel.Size = UDim2.new(0, 100, 1, 0)
-cheatNameLabel.Position = UDim2.new(1, -100, 0, 0) -- Rechts neben dem letzten Tab
-cheatNameLabel.Text = "Kaniflow" -- Name deines Cheats
-cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Dunkler Hintergrund
-cheatNameLabel.TextColor3 = Color3.fromRGB(0,175,255)
-    cheatNameLabel.Font = Enum.Font.SourceSansBold
-    cheatNameLabel.TextSize = 18
+cheatNameLabel.Position = UDim2.new(1, -100, 0, 0)
+cheatNameLabel.Text = "Kaniflow"
+cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
+cheatNameLabel.Font = Enum.Font.SourceSansBold
+cheatNameLabel.TextSize = 18
     cheatNameLabel.Parent = tabBar
 
 -- Neuer Anti-Fall Ansatz
