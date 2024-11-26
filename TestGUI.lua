@@ -76,38 +76,40 @@ for i, tabName in ipairs(tabs) do
         button.TextSize = 14
         button.Parent = tabContent
 
-     -- Funktion für "Steal Car" Button
-if button.Text == "Steal Car" then
-    button.MouseButton1Click:Connect(function()
-        local player = game.Players.LocalPlayer
-        local character = player.Character
-        local hrp = character:WaitForChild("HumanoidRootPart")
-        local closestSeat
-        local closestDistance = math.huge
+        -- Funktion für "Steal Car" Button
+        if button.Text == "Steal Car" then
+            button.MouseButton1Click:Connect(function()
+                local player = game.Players.LocalPlayer
+                local character = player.Character
+                local hrp = character:WaitForChild("HumanoidRootPart")
+                local closestSeat
+                local closestDistance = math.huge
 
-        -- Suchen des nächstgelegenen VehicleSeats oder DriverSeats
-        for _, obj in pairs(workspace:GetDescendants()) do
-            if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
-                local distance = (obj.Position - hrp.Position).Magnitude
-                if distance < closestDistance then
-                    closestDistance = distance
-                    closestSeat = obj
+                -- Suchen des nächstgelegenen VehicleSeats oder DriverSeats
+                for _, obj in pairs(workspace:GetDescendants()) do
+                    if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
+                        if obj.Parent:IsA("Model") and obj.Parent:FindFirstChild("Humanoid") == nil then
+                            local distance = (obj.Position - hrp.Position).Magnitude
+                            if distance < closestDistance then
+                                closestDistance = distance
+                                closestSeat = obj
+                            end
+                        end
+                    end
                 end
-            end
+
+                -- Spieler in den nächstgelegenen Fahrersitz setzen
+                if closestSeat and closestSeat:IsA("VehicleSeat") then
+                    hrp.CFrame = closestSeat.CFrame
+                    wait(0.1) -- Kurze Wartezeit, um sicherzustellen, dass der Spieler korrekt positioniert ist
+                    closestSeat:Sit(character.Humanoid)
+                    print("Player seated in the closest vehicle seat.")
+                else
+                    print("No vehicle seat found nearby.")
+                end
+            end)
         end
 
-        -- Spieler in den nächstgelegenen Sitz setzen
-        if closestSeat then
-            -- Setze den Spieler in den Sitz
-            closestSeat.Occupant = character.Humanoid
-            hrp.CFrame = closestSeat.CFrame
-            character.Humanoid.Sit = true
-            print("Player seated in the closest vehicle seat.")
-        else
-            print("No vehicle seat found nearby.")
-        end
-    end)
-end
         -- Andere Buttons
         if button.Text == "Infinite Yield" then
             button.MouseButton1Click:Connect(function()
@@ -195,21 +197,21 @@ cheatNameLabel.Parent = tabBar
 game:GetService("RunService").Stepped:Connect(function()
     if _G.antiFallEnabled then
         local player = game.Players.LocalPlayer
-        if player.Character and player.Character :FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
             local humanoid = player.Character.Humanoid
             local hrp = player.Character.HumanoidRootPart
             local velocity = hrp.Velocity
-            local ray = Ray.new(hrp.Position, Vector3.down * 10)
+            local ray = Ray.new(hrp.Position, Vector3.new(0, -10, 0))
             local rayResult = workspace:FindPartOnRay(ray)
             if rayResult then
                 local distance = (hrp.Position - rayResult.Position).Magnitude
                 if distance > 5 then
                     humanoid.JumpPower = 50
-                    humanoid.Jump()
+                    humanoid.Jump = true
                 end
             else
                 humanoid.JumpPower = 50
-                humanoid.Jump()
+                humanoid.Jump = true
             end
         end
     end
