@@ -82,10 +82,10 @@ for i, tabName in ipairs(tabs) do
                 for _, obj in pairs(workspace:GetDescendants()) do
                     if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
                         if obj.Parent:IsA("Model") and obj.Parent:FindFirstChild("Humanoid") == nil then
-                            local distance = (obj.Position - hrp.Position).Magnitude
+                            local distance = ( obj.Position - hrp.Position).Magnitude
                             if distance < closestDistance then
                                 closestDistance = distance
-                                closest Seat = obj
+                                closestSeat = obj
                             end
                         end
                     end
@@ -189,7 +189,7 @@ cheatNameLabel.Position = UDim2.new(1, -100, 0, 0)
 cheatNameLabel.Text = "Kaniflow"
 cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
-che atNameLabel.Font = Enum.Font.SourceSansBold
+cheatNameLabel.Font = Enum.Font.SourceSansBold
 cheatNameLabel.TextSize = 18
 cheatNameLabel.Parent = tabBar
 
@@ -217,4 +217,4 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 end)
 
-gui.Enabled = true
+gui.Enabled = true 
