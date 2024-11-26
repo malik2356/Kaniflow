@@ -76,36 +76,41 @@ for i, tabName in ipairs(tabs) do
         button.TextSize = 14
         button.Parent = tabContent
 
-        -- Funktion für "Steal Car" Button
-        if button.Text == "Steal Car" then
+        -- Funktion für "Car Fly" Button
+        if button.Text == "Car Fly" then
             button.MouseButton1Click:Connect(function()
                 local player = game.Players.LocalPlayer
                 local character = player.Character
                 local hrp = character:WaitForChild("HumanoidRootPart")
-                local closestSeat
+                local closestVehicle
                 local closestDistance = math.huge
 
-                -- Suchen des nächstgelegenen VehicleSeats oder DriverSeats
+                -- Suchen des nächstgelegenen Fahrzeugs
                 for _, obj in pairs(workspace:GetDescendants()) do
-                    if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
-                        if obj.Parent:IsA("Model") and obj.Parent:FindFirstChild("Humanoid") == nil then
-                            local distance = (obj.Position - hrp.Position).Magnitude
-                            if distance < closestDistance then
-                                closestDistance = distance
-                                closestSeat = obj
-                            end
+                    if obj:IsA("Model") and obj:FindFirstChild("VehicleSeat") then
+                        local distance = (obj.VehicleSeat.Position - hrp.Position).Magnitude
+                        if distance < closestDistance then
+                            closestDistance = distance
+                            closestVehicle = obj
                         end
                     end
                 end
 
-                -- Spieler in den nächstgelegenen Fahrersitz setzen
-                if closestSeat and closestSeat:IsA("VehicleSeat") then
-                    hrp.CFrame = closestSeat.CFrame
-                    wait(0.1) -- Kurze Wartezeit, um sicherzustellen, dass der Spieler korrekt positioniert ist
-                    closestSeat:Sit(character.Humanoid)
-                    print("Player seated in the closest vehicle seat.")
+                -- Schwerkraft des Fahrzeugs ändern
+                if closestVehicle then
+                    local bodyGyro = Instance.new("BodyGyro")
+                    bodyGyro.MaxTorque = Vector3.new(400000, 400000, 400000)
+                    bodyGyro.P = 3000
+                    bodyGyro.Parent = closestVehicle.PrimaryPart
+
+                    local bodyVelocity = Instance.new("BodyVelocity")
+                    bodyVelocity.Velocity = Vector3.new(0, 50, 0) -- Geschwindigkeit nach oben
+                    bodyVelocity.MaxForce = Vector3.new(400000, 400000, 400000)
+                    bodyVelocity.Parent = closestVehicle.PrimaryPart
+
+                    print("Vehicle is now flying.")
                 else
-                    print("No vehicle seat found nearby.")
+                    print("No vehicle found nearby.")
                 end
             end)
         end
@@ -177,7 +182,7 @@ for i, tabName in ipairs(tabs) do
         label.TextColor3 = Color3.new(1, 1, 1)
         label.Font = Enum.Font.SourceSans
         label.TextSize = 14
-                label.BackgroundTransparency = 1
+        label.BackgroundTransparency = 1
         label.Parent = checkboxFrame
     end
 end
@@ -188,10 +193,10 @@ cheatNameLabel.Size = UDim2.new(0, 100, 1, 0)
 cheatNameLabel.Position = UDim2.new(1, -100, 0, 0) -- Rechts neben dem letzten Tab
 cheatNameLabel.Text = "Kaniflow" -- Name deines Cheats
 cheatNameLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Dunkler Hintergrund
-cheatNameLabel.TextColor3 = Color3.fromRGB(0, 170, 255) -- Leuchtend blau
-cheatNameLabel.Font = Enum.Font.SourceSansBold
-cheatNameLabel.TextSize = 18
-cheatNameLabel.Parent = tabBar
+cheatNameLabel.TextColor3 = Color3.fromRGB(0,175,255)
+    cheatNameLabel.Font = Enum.Font.SourceSansBold
+    cheatNameLabel.TextSize = 18
+    cheatNameLabel.Parent = tabBar
 
 -- Neuer Anti-Fall Ansatz
 game:GetService("RunService").Stepped:Connect(function()
