@@ -176,7 +176,7 @@ for i, tabName in ipairs(tabs) do
     -- Settings-Tab: Scrollbar und Dropdowns
     if tabName == "Settings" then
         local dropdownFrame = Instance.new("Frame")
-        dropdownFrame.Size = UDim2.new(0, 180, 1, 0)
+        dropdownFrame.Size = UDim2.new(0, 100, 1, 0) -- Schmalere Sidebar
         dropdownFrame.Position = UDim2.new(0, 0, 0, 0)
         dropdownFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         dropdownFrame.Parent = tabContent
@@ -203,16 +203,23 @@ for i, tabName in ipairs(tabs) do
             dropdownTitle.TextSize = 18
             dropdownTitle.Parent = dropdownList
 
+            dropdownTitle.MouseButton1Click:Connect(function()
+                for _, child in pairs(dropdownList:GetChildren()) do
+                    if child:IsA("Frame") and child.Name == dropdown.Name then
+                        child.Visible = not child.Visible
+                    else
+                        child.Visible = false
+                    end
+                end
+            end)
+
             local dropdownContent = Instance.new("Frame")
+            dropdownContent.Name = dropdown.Name
             dropdownContent.Size = UDim2.new(1, -20, 0, #dropdown.Options * 40)
-            dropdownContent.Position = UDim2.new(0, 10, 0, (i - 1) * 40 + 30)
+            dropdownContent.Position = UDim2.new(0, 110, 0, 0) -- Rechts neben der Sidebar
             dropdownContent.Visible = false
             dropdownContent.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-            dropdownContent.Parent = dropdownList
-
-            dropdownTitle.MouseButton1Click:Connect(function()
-                dropdownContent.Visible = not dropdownContent.Visible
-            end)
+            dropdownContent.Parent = tabContent
 
             for j, option in ipairs(dropdown.Options) do
                 local optionButton = Instance.new("TextButton")
