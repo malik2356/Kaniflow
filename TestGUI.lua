@@ -204,7 +204,7 @@ for i, tabName in ipairs(tabs) do
             dropdownTitle.Parent = dropdownList
 
             dropdownTitle.MouseButton1Click:Connect(function()
-                for _, child in pairs(dropdownList:GetChildren()) do
+                for _, child in pairs(tabContent:GetChildren()) do
                     if child:IsA("Frame") and child.Name == dropdown.Name then
                         child.Visible = not child.Visible
                     else
