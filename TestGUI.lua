@@ -54,61 +54,119 @@ for i, tabName in ipairs(tabs) do
     tabContent.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     tabContent.Parent = contentFrame
 
-    -- Platzhalter: Buttons
-    local buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
-    if tabName ~= "Home" then
-        buttonLabels = {"Button 1", "Button 2", "Button 3"}
-    end
+    -- Home-Tab: Buttons und Checkboxen
+    if tabName == "Home" then
+        local buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
+        for j = 1, 3 do
+            local button = Instance.new("TextButton")
+            button.Size = UDim2.new(0, 100, 0, 30)
+            button.Position = UDim2.new(0, 20, 0, 20 + (j - 1) * 40)
+            button.Text = buttonLabels[j]
+            button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+            button.TextColor3 = Color3.new(1, 1, 1)
+            button.Font = Enum.Font.SourceSans
+            button.TextSize = 14
+            button.Parent = tabContent
 
-    for j = 1, 3 do
-        local button = Instance.new("TextButton")
-        button.Size = UDim2.new(0, 100, 0, 30)
-        button.Position = UDim2.new(0, 20, 0, 20 + (j - 1) * 40)
-        button.Text = buttonLabels[j]
-        button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-        button.TextColor3 = Color3.new(1, 1, 1)
-        button.Font = Enum.Font.SourceSans
-        button.TextSize = 14
-        button.Parent = tabContent
+            if button.Text == "Steal Car" then
+                button.MouseButton1Click:Connect(function()
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character
+                    local hrp = character:WaitForChild("HumanoidRootPart")
+                    local closestSeat
+                    local closestDistance = math.huge
 
-        if button.Text == "Steal Car" then
-            button.MouseButton1Click:Connect(function()
-                local player = game.Players.LocalPlayer
-                local character = player.Character
-                local hrp = character:WaitForChild("HumanoidRootPart")
-                local closestSeat
-                local closestDistance = math.huge
+                    for _, obj in pairs(workspace:GetDescendants()) do
+                        if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
+                            if obj.Parent:IsA("Model") and obj.Parent:FindFirstChild("Humanoid") == nil then
+                                local distance = (obj.Position - hrp.Position).Magnitude
+                                if distance < closestDistance then
+                                    closestDistance = distance
+                                    closestSeat = obj
+                                end
+                            end
+                        end
+                    end
 
-                for _, obj in pairs(workspace:GetDescendants()) do
-                    if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
-                        if obj.Parent:IsA("Model") and obj.Parent:FindFirstChild("Humanoid") == nil then
-                            local distance = (obj.Position - hrp.Position).Magnitude
-                            if distance < closestDistance then
-                                closestDistance = distance
-                                closestSeat = obj
+                    if closestSeat and closestSeat:IsA("VehicleSeat") then
+                        hrp.CFrame = closestSeat.CFrame
+                        wait(0.1)
+                        closestSeat:Sit(character.Humanoid)
+                        print("Player seated in the closest vehicle seat.")
+                    else
+                        print("No vehicle seat found nearby.")
+                    end
+                end)
+            end
+
+            if button.Text == "Infinite Yield" then
+                button.MouseButton1Click:Connect(function()
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+                end)
+            end
+        end
+
+        local checkboxLabels = {"Anti Fall", "Noclip"}
+        for k = 1, 2 do
+            local checkboxFrame = Instance.new("Frame")
+            checkboxFrame.Size = UDim2.new(0, 140, 0, 20)
+            checkboxFrame.Position = UDim2.new(0, 140, 0, 20 + (k - 1) * 40)
+            checkboxFrame.BackgroundTransparency = 1
+            checkboxFrame.Parent = tabContent
+
+            local checkbox = Instance.new("TextButton")
+            checkbox.Size = UDim2.new(0, 20, 0, 20)
+            checkbox.Position = UDim2.new(0, 0, 0, 0)
+            checkbox.Text = ""
+            checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
+            checkbox.Parent = checkboxFrame
+
+            -- Klick-Event für Checkbox (wechselt Farbe bei Klick)
+            checkbox.MouseButton1Click:Connect(function()
+                if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
+                    checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Aktiviert
+                    if k == 1 then
+                        _G.antiFallEnabled = true
+                    elseif k == 2 then
+                        _G.noclipEnabled = true
+                        game:GetService("RunService").Stepped:Connect(function()
+                            if _G.noclipEnabled then
+                                for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                                    if part:IsA("BasePart") then
+                                        part.CanCollide = false
+                                    end
+                                end
+                            end
+                        end)
+                    end
+                else
+                    checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120) -- Deaktiviert
+                    if k == 1 then
+                        _G.antiFallEnabled = false
+                    elseif k == 2 then
+                        _G.noclipEnabled = false
+                        for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                            if part:IsA("BasePart") then
+                                part.CanCollide = true
                             end
                         end
                     end
                 end
-
-                if closestSeat and closestSeat:IsA("VehicleSeat") then
-                    hrp.CFrame = closestSeat.CFrame
-                    wait(0.1)
-                    closestSeat:Sit(character.Humanoid)
-                    print("Player seated in the closest vehicle seat.")
-                else
-                    print("No vehicle seat found nearby.")
-                end
             end)
-        end
 
-        if button.Text == "Infinite Yield" then
-            button.MouseButton1Click:Connect(function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-            end)
+            local label = Instance.new("TextLabel")
+            label.Size = UDim2.new(0, 100, 0, 20)
+            label.Position = UDim2.new(1, 5, 0, 0)
+            label.Text = checkboxLabels[k]
+            label.TextColor3 = Color3.new(1, 1, 1)
+            label.Font = Enum.Font.SourceSans
+            label.TextSize = 14
+            label.BackgroundTransparency = 1
+            label.Parent = checkboxFrame
         end
     end
 
+    -- Settings-Tab: Checkbox und Eingabefeld für Laufgeschwindigkeit
     if tabName == "Settings" then
         local checkboxFrame = Instance.new("Frame")
         checkboxFrame.Size = UDim2.new(0, 140, 0, 20)
@@ -136,7 +194,7 @@ for i, tabName in ipairs(tabs) do
         local inputFrame = Instance.new("Frame")
         inputFrame.Size = UDim2.new(0, 100, 0, 30)
         inputFrame.Position = UDim2.new(0, 140, 0, 50)
-        inputFrame.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+                inputFrame.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
         inputFrame.Parent = tabContent
         inputFrame.Visible = false
 
