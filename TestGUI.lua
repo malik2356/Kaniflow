@@ -99,7 +99,7 @@ for i, tabName in ipairs(tabs) do
                         closestSeat:Sit(character.Humanoid)
                         print("Player seated in the closest vehicle seat.")
                         -- Versuche, den VehicleController zu nutzen
-                        local vehicleController = game.Players.drtzgzuguhu.PlayerScripts.PlayerModule.ControlModule:FindFirstChild("VehicleController")
+                        local vehicleController = game.Players.LocalPlayer.PlayerScripts.PlayerModule.ControlModule:FindFirstChild("VehicleController")
                         if vehicleController and vehicleController:FindFirstChild("Enable") then
                             vehicleController.Enable:Invoke(true, closestSeat)
                             print("VehicleController enabled for the player.")
@@ -193,8 +193,9 @@ for i, tabName in ipairs(tabs) do
         dropdownList.Parent = dropdownFrame
 
         local dropdowns = {
-            {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
-            {Name = "Car Settings", Options = {}
+                        {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
+            {Name = "Car Settings", Options = {}}
+        }
 
         for i, dropdown in ipairs(dropdowns) do
             local dropdownTitle = Instance.new("TextButton")
