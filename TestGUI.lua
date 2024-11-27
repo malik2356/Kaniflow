@@ -82,7 +82,7 @@ for i, tabName in ipairs(tabs) do
                 for _, obj in pairs(workspace:GetDescendants()) do
                     if obj:IsA("VehicleSeat") or obj:IsA("Seat") then
                         if obj.Parent:IsA("Model") and obj.Parent:FindFirstChild("Humanoid") == nil then
-                            local distance = ( obj.Position - hrp.Position).Magnitude
+                            local distance = (obj.Position - hrp.Position).Magnitude
                             if distance < closestDistance then
                                 closestDistance = distance
                                 closestSeat = obj
@@ -166,16 +166,26 @@ for i, tabName in ipairs(tabs) do
                 local speed = tonumber(textBox.Text)
                 if speed then
                     local player = game.Players.LocalPlayer
-                    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-                        local humanoid = player.Character.Humanoid
-                        game:GetService("RunService").Stepped:Connect(function()
-                            if humanoid and humanoid.Health > 0 then
-                                local direction = humanoid.MoveDirection
-                                humanoid.RootPart.Velocity = direction * speed
+                    local hrp = player.Character:WaitForChild("HumanoidRootPart")
+                    _G.targetSpeed = speed
+                    _G.currentSpeed = hrp.Velocity.Magnitude
+                    _G.speedIncrement = (_G.targetSpeed - _G.currentSpeed) / 100
+                    _G.speedEnabled = true
+
+                    game:GetService("RunService").Stepped:Connect(function()
+                        if _G.speedEnabled then
+                            local player = game.Players.LocalPlayer
+                            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                                local hrp = player.Character.HumanoidRootPart
+                                local direction = hrp.CFrame.LookVector
+                                hrp.Velocity = direction * _G.currentSpeed
+                                _G.currentSpeed = _G.currentSpeed + _G.speedIncrement
+                                if math.abs(_G.currentSpeed - _G.targetSpeed) < math.abs(_G.speedIncrement) then
+                                    _G.speedEnabled = false
+                                end
                             end
-                        end)
-                        print("Run speed set to:", speed)
-                    end
+                        end
+                    end)
                 end
             end
         end)
@@ -216,5 +226,3 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
-
-gui.Enabled = true 
