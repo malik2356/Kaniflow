@@ -194,7 +194,6 @@ for i, tabName in ipairs(tabs) do
 
         for i, dropdown in ipairs(dropdowns) do
             local dropdownTitle = Instance.new("TextButton")
-            dropdownTitle.Size = UDim2.new(1, -20, 0, 30)
                         dropdownTitle.Position = UDim2.new(0, 10, 0, (i - 1) * 40)
             dropdownTitle.Text = dropdown.Name
             dropdownTitle.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -203,28 +202,21 @@ for i, tabName in ipairs(tabs) do
             dropdownTitle.TextSize = 18
             dropdownTitle.Parent = dropdownList
 
-            dropdownTitle.MouseButton1Click:Connect(function()
-                for _, child in pairs(tabContent:GetChildren()) do
-                    if child:IsA("Frame") and child.Name == dropdown.Name then
-                        child.Visible = not child.Visible
-                    else
-                        child.Visible = false
-                    end
-                end
-                dropdownContent.Position = UDim2.new(0, 110, 0, (i - 1) * 40) -- Rechts neben der Sidebar und aktualisiert
-            end)
-
             local dropdownContent = Instance.new("Frame")
             dropdownContent.Name = dropdown.Name
-            dropdownContent.Size = UDim2.new(0, 250, 0, #dropdown.Options * 40) -- Angemessene Größe für Optionen
-            dropdownContent.Position = UDim2.new(0, 110, 0, (i - 1) * 40) -- Rechts neben der Sidebar
+            dropdownContent.Size = UDim2.new(0, 250, 0, #dropdown.Options * 40)
+            dropdownContent.Position = UDim2.new(0, 110, 0, (i - 1) * 40)
             dropdownContent.Visible = false
             dropdownContent.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
             dropdownContent.Parent = tabContent
 
+            dropdownTitle.MouseButton1Click:Connect(function()
+                dropdownContent.Visible = not dropdownContent.Visible
+            end)
+
             for j, option in ipairs(dropdown.Options) do
                 local optionButton = Instance.new("TextButton")
-                optionButton.Size = UDim2.new(1, -10, 0, 30) -- Angepasste Breite für die Buttons
+                optionButton.Size = UDim2.new(1, -10, 0, 30)
                 optionButton.Position = UDim2.new(0, 5, 0, (j - 1) * 40)
                 optionButton.Text = option
                 optionButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -237,16 +229,16 @@ for i, tabName in ipairs(tabs) do
                 optionButton.MouseButton1Click:Connect(function()
                     if option == "Bank" then
                         -- Teleportiere den Spieler zur Bank
-                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(x1, y1, z1))
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(0, 10, 0))
                     elseif option == "Jeweler" then
                         -- Teleportiere den Spieler zum Juwelier
-                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(x2, y2, z2))
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(10, 0, 10))
                     elseif option == "Dealership" then
                         -- Teleportiere den Spieler zum Autohaus
-                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(x3, y3, z3))
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-10, 0, -10))
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
-                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(x4, y4, z4))
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(20, 0, 20))
                     end
                 end)
             end
@@ -282,3 +274,4 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
+
