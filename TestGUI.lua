@@ -93,12 +93,13 @@ for i, tabName in ipairs(tabs) do
                         wait(0.1)
                         closestSeat:Sit(character.Humanoid)
                         print("Player seated in the closest vehicle seat.")
-                        -- Eigentum des Autos ändern
-                        if closestSeat.Parent:FindFirstChild("Owner") then
-                            closestSeat.Parent.Owner.Value = player
-                            print("Vehicle ownership changed to:", player.Name)
+                        -- Versuche, den VehicleController zu nutzen
+                        local vehicleController = game.Players.drtzgzuguhu.PlayerScripts.PlayerModule.ControlModule:FindFirstChild("VehicleController")
+                        if vehicleController and vehicleController:FindFirstChild("Enable") then
+                            vehicleController.Enable:Invoke(true, closestSeat)
+                            print("VehicleController enabled for the player.")
                         else
-                            print("No Owner property found on this vehicle.")
+                            print("VehicleController not found or cannot be enabled.")
                         end
                     else
                         print("No vehicle seat found nearby.")
@@ -182,7 +183,7 @@ for i, tabName in ipairs(tabs) do
 
         local checkbox = Instance.new("TextButton")
         checkbox.Size = UDim2.new(0, 20, 0, 20)
-        checkbox.Position = UDim2.new(0, 0, 0, 0)
+                checkbox.Position = UDim2.new(0, 0, 0, 0)
         checkbox.Text = ""
         checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
         checkbox.Parent = checkboxFrame
@@ -192,7 +193,7 @@ for i, tabName in ipairs(tabs) do
         label.Position = UDim2.new(1, 5, 0, 0)
         label.Text = "Run Speed"
         label.TextColor3 = Color3.new(1, 1, 1)
-                label.Font = Enum.Font.SourceSans
+        label.Font = Enum.Font.SourceSans
         label.TextSize = 14
         label.BackgroundTransparency = 1
         label.Parent = checkboxFrame
