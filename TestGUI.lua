@@ -173,87 +173,76 @@ for i, tabName in ipairs(tabs) do
         end
     end
 
-    -- Settings-Tab: Checkbox und Eingabefeld für Laufgeschwindigkeit
+    -- Settings-Tab: Scrollbar und Dropdowns
     if tabName == "Settings" then
-        local checkboxFrame = Instance.new("Frame")
-        checkboxFrame.Size = UDim2.new(0, 140, 0, 20)
-        checkboxFrame.Position = UDim2.new(0, 140, 0, 20)
-        checkboxFrame.BackgroundTransparency = 1
-        checkboxFrame.Parent = tabContent
+        local dropdownFrame = Instance.new("Frame")
+        dropdownFrame.Size = UDim2.new(0, 180, 1, 0)
+        dropdownFrame.Position = UDim2.new(0, 0, 0, 0)
+        dropdownFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        dropdownFrame.Parent = tabContent
 
-        local checkbox = Instance.new("TextButton")
-        checkbox.Size = UDim2.new(0, 20, 0, 20)
-                checkbox.Position = UDim2.new(0, 0, 0, 0)
-        checkbox.Text = ""
-        checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-        checkbox.Parent = checkboxFrame
+        local dropdownList = Instance.new("ScrollingFrame")
+        dropdownList.Size = UDim2.new(1, 0, 1, 0)
+        dropdownList.CanvasSize = UDim2.new(0, 0, 2, 0) -- Ausreichend Platz für mehrere Dropdowns
+        dropdownList.ScrollBarThickness = 10
+        dropdownList.Parent = dropdownFrame
 
-        local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(0, 100, 0, 20)
-        label.Position = UDim2.new(1, 5, 0, 0)
-        label.Text = "Run Speed"
-        label.TextColor3 = Color3.new(1, 1, 1)
-        label.Font = Enum.Font.SourceSans
-        label.TextSize = 14
-        label.BackgroundTransparency = 1
-        label.Parent = checkboxFrame
+        local dropdowns = {
+            {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
+            {Name = "Car Settings", Options = {}}
+        }
 
-        local inputFrame = Instance.new("Frame")
-        inputFrame.Size = UDim2.new(0, 100, 0, 30)
-        inputFrame.Position = UDim2.new(0, 140, 0, 50)
-        inputFrame.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-        inputFrame.Parent = tabContent
-        inputFrame.Visible = false
+        for i, dropdown in ipairs(dropdowns) do
+            local dropdownTitle = Instance.new("TextButton")
+            dropdownTitle.Size = UDim2.new(1, -20, 0, 30)
+                        dropdownTitle.Position = UDim2.new(0, 10, 0, (i - 1) * 40)
+            dropdownTitle.Text = dropdown.Name
+            dropdownTitle.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            dropdownTitle.TextColor3 = Color3.new(1, 1, 1)
+            dropdownTitle.Font = Enum.Font.SourceSansBold
+            dropdownTitle.TextSize = 18
+            dropdownTitle.Parent = dropdownList
 
-        local textBox = Instance.new("TextBox")
-        textBox.Size = UDim2.new(1, 0, 1, 0)
-        textBox.Position = UDim2.new(0, 0, 0, 0)
-        textBox.Text = "Enter speed"
-        textBox.ClearTextOnFocus = true
-        textBox.Font = Enum.Font.SourceSans
-        textBox.TextSize = 14
-        textBox.TextColor3 = Color3.new(1, 1, 1)
-        textBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        textBox.Parent = inputFrame
+            local dropdownContent = Instance.new("Frame")
+            dropdownContent.Size = UDim2.new(1, -20, 0, #dropdown.Options * 40)
+            dropdownContent.Position = UDim2.new(0, 10, 0, (i - 1) * 40 + 30)
+            dropdownContent.Visible = false
+            dropdownContent.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            dropdownContent.Parent = dropdownList
 
-        checkbox.MouseButton1Click:Connect(function()
-            if checkbox.BackgroundColor3 == Color3.fromRGB(120, 120, 120) then
-                checkbox.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-                inputFrame.Visible = true
-            else
-                checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-                inputFrame.Visible = false
+            dropdownTitle.MouseButton1Click:Connect(function()
+                dropdownContent.Visible = not dropdownContent.Visible
+            end)
+
+            for j, option in ipairs(dropdown.Options) do
+                local optionButton = Instance.new("TextButton")
+                optionButton.Size = UDim2.new(1, 0, 0, 30)
+                optionButton.Position = UDim2.new(0, 0, 0, (j - 1) * 40)
+                optionButton.Text = option
+                optionButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                optionButton.TextColor3 = Color3.new(1, 1, 1)
+                optionButton.Font = Enum.Font.SourceSans
+                optionButton.TextSize = 16
+                optionButton.Parent = dropdownContent
+
+                -- Beispielaktion für Teleport-Optionen
+                optionButton.MouseButton1Click:Connect(function()
+                    if option == "Bank" then
+                        -- Teleportiere den Spieler zur Bank
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(x1, y1, z1))
+                    elseif option == "Jeweler" then
+                        -- Teleportiere den Spieler zum Juwelier
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(x2, y2, z2))
+                    elseif option == "Dealership" then
+                        -- Teleportiere den Spieler zum Autohaus
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(x3, y3, z3))
+                    elseif option == "Smuggler" then
+                        -- Teleportiere den Spieler zum Schmuggler
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(x4, y4, z4))
+                    end
+                end)
             end
-        end)
-
-        textBox.FocusLost:Connect(function(enterPressed)
-            if enterPressed then
-                local speed = tonumber(textBox.Text)
-                if speed then
-                    local player = game.Players.LocalPlayer
-                    local hrp = player.Character:WaitForChild("HumanoidRootPart")
-                    _G.targetSpeed = speed
-                    _G.currentSpeed = hrp.Velocity.Magnitude
-                    _G.speedIncrement = (_G.targetSpeed - _G.currentSpeed) / 100
-                    _G.speedEnabled = true
-
-                    game:GetService("RunService").Stepped:Connect(function()
-                        if _G.speedEnabled then
-                            local player = game.Players.LocalPlayer
-                            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                                local hrp = player.Character.HumanoidRootPart
-                                local direction = hrp.CFrame.LookVector
-                                hrp.Velocity = direction * _G.currentSpeed
-                                _G.currentSpeed = _G.currentSpeed + _G.speedIncrement
-                                if math.abs(_G.currentSpeed - _G.targetSpeed) < math.abs(_G.speedIncrement) then
-                                    _G.speedEnabled = false
-                                end
-                            end
-                        end
-                    end)
-                end
-            end
-        end)
+        end
     end
 end
 
