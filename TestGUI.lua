@@ -194,8 +194,8 @@ for i, tabName in ipairs(tabs) do
 
         for i, dropdown in ipairs(dropdowns) do
             local dropdownTitle = Instance.new("TextButton")
-                        dropdownTitle.Size = UDim2.new(1, -20, 0, 30)
-            dropdownTitle.Position = UDim2.new(0, 10, 0, (i - 1) * 40)
+            dropdownTitle.Size = UDim2.new(1, -20, 0, 30)
+                        dropdownTitle.Position = UDim2.new(0, 10, 0, (i - 1) * 40)
             dropdownTitle.Text = dropdown.Name
             dropdownTitle.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
             dropdownTitle.TextColor3 = Color3.new(1, 1, 1)
@@ -216,7 +216,7 @@ for i, tabName in ipairs(tabs) do
 
             local dropdownContent = Instance.new("Frame")
             dropdownContent.Name = dropdown.Name
-            dropdownContent.Size = UDim2.new(1, -110, 0, #dropdown.Options * 40) -- Passt die Größe an, um Platz für alle Optionen zu schaffen
+            dropdownContent.Size = UDim2.new(0, 250, 0, #dropdown.Options * 40) -- Angemessene Größe für Optionen
             dropdownContent.Position = UDim2.new(0, 110, 0, (i - 1) * 40) -- Rechts neben der Sidebar
             dropdownContent.Visible = false
             dropdownContent.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -224,8 +224,8 @@ for i, tabName in ipairs(tabs) do
 
             for j, option in ipairs(dropdown.Options) do
                 local optionButton = Instance.new("TextButton")
-                optionButton.Size = UDim2.new(1, 0, 0, 30)
-                optionButton.Position = UDim2.new(0, 0, 0, (j - 1) * 40)
+                optionButton.Size = UDim2.new(1, -10, 0, 30) -- Angepasste Breite für die Buttons
+                optionButton.Position = UDim2.new(0, 5, 0, (j - 1) * 40)
                 optionButton.Text = option
                 optionButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
                 optionButton.TextColor3 = Color3.new(1, 1, 1)
