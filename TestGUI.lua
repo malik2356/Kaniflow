@@ -273,20 +273,14 @@ game:GetService("RunService").Stepped:Connect(function()
     if _G.antiFallEnabled then
         local player = game.Players.LocalPlayer
         if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
-            local humanoid = player.Character.Humanoid
             local hrp = player.Character.HumanoidRootPart
-            local velocity = hrp.Velocity
-            local ray = Ray.new(hrp.Position, Vector3.new(0, -10, 0))
-            local rayResult = workspace:FindPartOnRay(ray)
-            if rayResult then
-                local distance = (hrp.Position - rayResult.Position).Magnitude
-                if distance > 5 then
-                    humanoid.JumpPower = 50
-                    humanoid.Jump = true
-                end
+            local humanoid = player.Character.Humanoid
+
+            if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                humanoid.PlatformStand = true -- Verhindert Fallschaden
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, -5, hrp.Velocity.Z) -- Verlangsamt das Fallen
             else
-                humanoid.JumpPower = 50
-                humanoid.Jump = true
+                humanoid.PlatformStand = false
             end
         end
     end
