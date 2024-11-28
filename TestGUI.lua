@@ -194,7 +194,8 @@ for i, tabName in ipairs(tabs) do
 
         local dropdowns = {
                         {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
-            {Name = "Car Settings", Options = {}}
+                        {Name = "Car Settings", Options = {}},
+                        {Name = "Character", Options = {}}
         }
 
         for i, dropdown in ipairs(dropdowns) do
