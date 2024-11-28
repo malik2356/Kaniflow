@@ -192,7 +192,7 @@ for i, tabName in ipairs(tabs) do
         dropdownList.ScrollBarThickness = 10
         dropdownList.Parent = dropdownFrame
 
-        local dropdowns = {
+                local dropdowns = {
             {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
             {Name = "Car Settings", Options = {}},
             {Name = "Character", Options = {}}
@@ -245,7 +245,12 @@ for i, tabName in ipairs(tabs) do
                         game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-10, 0, -10))
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
-                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(20, 0, 20))
+                        local target = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
+                        if target then
+                            game.Players.LocalPlayer.Character:MoveTo(target.Position)
+                        else
+                            warn("Smuggler target not found")
+                        end
                     end
                 end)
             end
@@ -281,3 +286,4 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
+
