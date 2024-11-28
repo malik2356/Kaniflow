@@ -201,7 +201,7 @@ for i, tabName in ipairs(tabs) do
         for i, dropdown in ipairs(dropdowns) do
             local dropdownTitle = Instance.new("TextButton")
             dropdownTitle.Size = UDim2.new(1, 0, 0, 30)
-            dropdownTitle.Position = UDim2.new(0, 0, -1, (i - 1) * 50) -- Verschieben nach links und unten
+            dropdownTitle.Position = UDim2.new(0, 0, 0, (i - 1) * 50) -- Verschieben nach links und unten
             dropdownTitle.Text = dropdown.Name
             dropdownTitle.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
             dropdownTitle.TextColor3 = Color3.new(1, 1, 1)
