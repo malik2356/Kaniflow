@@ -192,7 +192,8 @@ for i, tabName in ipairs(tabs) do
         dropdownList.ScrollBarThickness = 10
         dropdownList.Parent = dropdownFrame
 
-                local dropdowns = {
+        local dropdowns = {
+                    local dropdowns = {
             {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
             {Name = "Car Settings", Options = {}},
             {Name = "Character", Options = {}}
@@ -245,11 +246,28 @@ for i, tabName in ipairs(tabs) do
                         game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-10, 0, -10))
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
-                        local target = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
-                        if target then
-                            game.Players.LocalPlayer.Character:MoveTo(target.Position)
+                        local player = game.Players.LocalPlayer
+                        local vehicle = workspace.Vehicles:FindFirstChild(player.Name .. "_4")
+                        if vehicle and vehicle:FindFirstChild("DriveSeat") then
+                            local driveSeat = vehicle.DriveSeat
+                            if driveSeat:IsA("VehicleSeat") then
+                                player.Character.HumanoidRootPart.CFrame = driveSeat.CFrame
+                                wait(0.1)
+                                driveSeat:Sit(player.Character.Humanoid)
+                                print("Player seated in the vehicle.")
+
+                                local target = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
+                                if target then
+                                    vehicle:SetPrimaryPartCFrame(CFrame.new(target.Position))
+                                    print("Vehicle teleported to Smuggler.")
+                                else
+                                    warn("Smuggler target not found.")
+                                end
+                            else
+                                warn("DriveSeat is not a VehicleSeat.")
+                            end
                         else
-                            warn("Smuggler target not found")
+                            warn("Vehicle or DriveSeat not found.")
                         end
                     end
                 end)
@@ -286,4 +304,3 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
-
