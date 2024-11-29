@@ -1,5 +1,6 @@
 local gui = Instance.new("ScreenGui")
-gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+gui.ResetOnSpawn = false
+gui.Parent = game.CoreGui
 
 -- Hauptcontainer
 local mainFrame = Instance.new("Frame")
@@ -12,7 +13,7 @@ mainFrame.Parent = gui
 
 -- Rundung der Ecken des Hauptcontainers
 local mainFrameCorner = Instance.new("UICorner")
-mainFrameCorner.CornerRadius = UDim.new(0, 10) -- Anpassen der Rundung der Ecken
+mainFrameCorner.CornerRadius = UDim.new(0, 10)
 mainFrameCorner.Parent = mainFrame
 
 -- Tab-Leiste
@@ -28,7 +29,7 @@ contentFrame.Position = UDim2.new(0, 0, 0, 50)
 contentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 contentFrame.Parent = mainFrame
 
-local tabs = {"Home", "Settings", "Fun"} -- Beispiel-Reiter
+local tabs = {"Home", "Settings", "Fun"}
 
 for i, tabName in ipairs(tabs) do
     local tabButton = Instance.new("TextButton")
@@ -65,7 +66,7 @@ for i, tabName in ipairs(tabs) do
         for j = 1, 3 do
             local button = Instance.new("TextButton")
             button.Size = UDim2.new(0, 100, 0, 30)
-            button.Position = UDim2.new(0, 40, 0, 20 + (j - 1) * 40) -- Verschieben der Buttons nach rechts
+            button.Position = UDim2.new(0, 40, 0, 20 + (j - 1) * 40)
             button.Text = buttonLabels[j]
             button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
             button.TextColor3 = Color3.new(1, 1, 1)
@@ -123,7 +124,7 @@ for i, tabName in ipairs(tabs) do
         for k = 1, 2 do
             local checkboxFrame = Instance.new("Frame")
             checkboxFrame.Size = UDim2.new(0, 140, 0, 20)
-            checkboxFrame.Position = UDim2.new(0, 160, 0, 20 + (k - 1) * 40) -- Verschieben der Checkboxen nach rechts
+            checkboxFrame.Position = UDim2.new(0, 160, 0, 20 + (k - 1) * 40)
             checkboxFrame.BackgroundTransparency = 1
             checkboxFrame.Parent = tabContent
 
@@ -181,23 +182,22 @@ for i, tabName in ipairs(tabs) do
     -- Settings-Tab: Scrollbar und Dropdowns
     if tabName == "Settings" then
         local dropdownFrame = Instance.new("Frame")
-        dropdownFrame.Size = UDim2.new(0, 140, 1, 0) -- Etwas breitere Sidebar
+        dropdownFrame.Size = UDim2.new(0, 140, 1, 0)
         dropdownFrame.Position = UDim2.new(0, 0, 0, 0)
         dropdownFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         dropdownFrame.Parent = tabContent
 
         local dropdownList = Instance.new("ScrollingFrame")
         dropdownList.Size = UDim2.new(1, 0, 1, 0)
-        dropdownList.CanvasSize = UDim2.new(0, 0, 2, 0) -- Ausreichend Platz für mehrere Dropdowns
+        dropdownList.CanvasSize = UDim2.new(0, 0, 2, 0)
         dropdownList.ScrollBarThickness = 10
         dropdownList.Parent = dropdownFrame
 
         local dropdowns = {
-                    local dropdowns = {
             {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
             {Name = "Car Settings", Options = {}},
             {Name = "Character", Options = {}}
-        }
+            }
 
         for i, dropdown in ipairs(dropdowns) do
             local dropdownTitle = Instance.new("TextButton")
@@ -304,3 +304,5 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
+
+
