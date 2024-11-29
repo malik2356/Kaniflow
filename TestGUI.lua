@@ -270,11 +270,13 @@ for i, tabName in ipairs(tabs) do
 end
 
 -- Anwendung
-if target and target:IsA("BasePart") then
-    teleportModelTo(vehicle, target.Position)
+local smugglerTarget = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
+if smugglerTarget and smugglerTarget:IsA("BasePart") then
+    teleportModelTo(vehicle, smugglerTarget.Position)
 else
-    print("Ungültiges Ziel oder Fahrzeugmodell!")
+    print("Ungültiges Ziel gefunden!")
 end
+
 
                                 else
                                     warn("Smuggler target not found.")
