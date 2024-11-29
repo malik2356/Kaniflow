@@ -195,7 +195,7 @@ for i, tabName in ipairs(tabs) do
 
         local dropdowns = {
             {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
-            {Name = "Car Settings", Options = {"Always working"}},
+            {Name = "Car Settings", Options = {}},
             {Name = "Character", Options = {}}
         }
 
@@ -247,7 +247,7 @@ for i, tabName in ipairs(tabs) do
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
                         local player = game.Players.LocalPlayer
-                        local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
+                        local vehicle = workspace.Vehicles:FindFirstChild(player.Name)
                         if vehicle and vehicle:FindFirstChild("DriveSeat") then
                             local driveSeat = vehicle.DriveSeat
                             if driveSeat:IsA("VehicleSeat") then
@@ -266,12 +266,6 @@ for i, tabName in ipairs(tabs) do
          end
      end
  end
-
- -- Car settings
- optionButton.MouseButton1Click:Connect(function()
-    if option == "Always working" then 
-      vehicle.IsOn = true
-    end 
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
