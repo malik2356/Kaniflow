@@ -258,8 +258,24 @@ for i, tabName in ipairs(tabs) do
 
                                 local target = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
                                 if target then
-                                    vehicle:SetPrimaryPartCFrame(CFrame.new(target.Position))
-                                    print("Vehicle teleported to Smuggler.")
+                                    local function teleportModelTo(model, targetPosition)
+    local currentCFrame = model:GetPivot() -- Falls `GetPivot` verfügbar ist, holt es die aktuelle CFrame des Modells
+    local offset = targetPosition - currentCFrame.Position -- Berechne den Versatz
+
+    for _, part in ipairs(model:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CFrame = part.CFrame + offset
+        end
+    end
+end
+
+-- Anwendung
+if target and target:IsA("BasePart") then
+    teleportModelTo(vehicle, target.Position)
+else
+    print("Ungültiges Ziel oder Fahrzeugmodell!")
+end
+
                                 else
                                     warn("Smuggler target not found.")
                                 end
