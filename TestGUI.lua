@@ -195,7 +195,7 @@ for i, tabName in ipairs(tabs) do
 
         local dropdowns = {
             {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
-            {Name = "Car Settings", Options = {}},
+            {Name = "Car Settings", Options = {"Always working"}},
             {Name = "Character", Options = {}}
         }
 
@@ -247,7 +247,7 @@ for i, tabName in ipairs(tabs) do
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
                         local player = game.Players.LocalPlayer
-                        local vehicle = workspace.Vehicles:FindFirstChild(player.Name)
+                        local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
                         if vehicle and vehicle:FindFirstChild("DriveSeat") then
                             local driveSeat = vehicle.DriveSeat
                             if driveSeat:IsA("VehicleSeat") then
@@ -258,41 +258,20 @@ for i, tabName in ipairs(tabs) do
 
                                 local target = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
                                 if target then
-                                    local function teleportModelTo(model, targetPosition)
-    local currentCFrame = model:GetPivot() -- Falls `GetPivot` verfügbar ist, holt es die aktuelle CFrame des Modells
-    local offset = targetPosition - currentCFrame.Position -- Berechne den Versatz
+                                    vehicle:SetPrimaryPartCFrame(CFrame.new(target.Position))
+                                end                
+                       end
+                 end)
+             end
+         end
+     end
+ end
 
-    for _, part in ipairs(model:GetDescendants()) do
-        if part:IsA("BasePart") then
-            part.CFrame = part.CFrame + offset
-        end
-    end
-end
-
--- Anwendung
-local smugglerTarget = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
-if smugglerTarget and smugglerTarget:IsA("BasePart") then
-    teleportModelTo(vehicle, smugglerTarget.Position)
-else
-    print("Ungültiges Ziel gefunden!")
-end
-
-
-                                else
-                                    warn("Smuggler target not found.")
-                                end
-                            else
-                                warn("DriveSeat is not a VehicleSeat.")
-                            end
-                        else
-                            warn("Vehicle or DriveSeat not found.")
-                        end
-                    end
-                end)
-            end
-        end
-    end
-end
+ -- Car settings
+ optionButton.MouseButton1Click:Connect(function()
+    if option == "Always working" then 
+      vehicle.IsOn = true
+    end 
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
@@ -322,5 +301,3 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
-
-            
