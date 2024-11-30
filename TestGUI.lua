@@ -285,20 +285,6 @@ end
     end
 end
 
--- Fun tab
- if tabName == "Fun" then
-    local funButtons = {"Always working"}
-    for l, button in ipairs(funButtons.funButton) do
-        local button1 = Instance.new("TextButton")
-         button1.Size = UDim2.new(0, 100, 0, 30)
-         button1.Position = UDim2.new(0, 40, 0, 20 + (j - 1) * 40)
-         button1.Text = buttonLabels[j]
-         button1.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-         button1.TextColor3 = Color3.new(1, 1, 1)
-         button1.Font = Enum.Font.SourceSans
-         button1.TextSize = 14
-         button1.Parent = tabContent
- end
 
 
 -- Cheat-Name anzeigen
