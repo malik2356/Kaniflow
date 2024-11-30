@@ -1,4 +1,3 @@
-
 local gui = Instance.new("ScreenGui")
 gui.ResetOnSpawn = false
 gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -42,6 +41,7 @@ for i, tabName in ipairs(tabs) do
     tabButton.Font = Enum.Font.SourceSansBold
     tabButton.TextSize = 18
     tabButton.Parent = tabBar
+end
 
     tabButton.MouseButton1Click:Connect(function()
         for _, child in pairs(contentFrame:GetChildren()) do
