@@ -60,9 +60,7 @@ end
     tabContent.Visible = (i == 1)
     tabContent.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     tabContent.Parent = contentFrame
-
-   
-         
+     
     -- Home-Tab: Buttons und Checkboxen
    if tabName == "Home" and tabContent then
         local buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
