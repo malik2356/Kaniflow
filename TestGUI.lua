@@ -276,11 +276,7 @@ for i, tabName in ipairs(tabs) do
     end
 end
 
---Car settings
-optionButton.MouseButton1Click:Connect(function()
-    if option == "Always working" then
-        vehicle.IsOn = true
-    end)
+
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
