@@ -1,7 +1,7 @@
 print("GUI has been opened")
 local gui = Instance.new("ScreenGui")
 gui.ResetOnSpawn = false
-gui.Parent = game.Players.LocalPlayer.PlayerGui
+gui.Parent = game.CoreGUI
 
 -- Hauptcontainer
 local mainFrame = Instance.new("Frame")
@@ -62,7 +62,7 @@ for i, tabName in ipairs(tabs) do
     tabContent.Parent = contentFrame
 
     -- Home-Tab: Buttons und Checkboxen
-    if tabName == "Home" then
+   if tabName == "Home" and tabContent then
         local buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
         for j = 1, 3 do
             local button = Instance.new("TextButton")
@@ -282,7 +282,8 @@ end
 optionButton.MouseButton1Click:Connect(function()
     if option == "Always working" then
         vehicle.IsOn = true
-    end)
+    end
+end)
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
