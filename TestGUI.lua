@@ -300,7 +300,7 @@ game:GetService("RunService").Stepped:Connect(function()
 
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
                 humanoid.PlatformStand = true -- Verhindert Fallschaden
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, -9, hrp.Velocity.Z) -- Verlangsamt das Fallen
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, -12, hrp.Velocity.Z) -- Verlangsamt das Fallen
             else
                 humanoid.PlatformStand = false
             end
