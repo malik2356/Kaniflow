@@ -199,7 +199,7 @@ for i, tabName in ipairs(tabs) do
             {Name = "Character", Options = {}}
         }
 
-                for i, dropdown in ipairs(dropdowns) do
+        for i, dropdown in ipairs(dropdowns) do
             local dropdownTitle = Instance.new("TextButton")
             dropdownTitle.Size = UDim2.new(1, 0, 0, 30)
             dropdownTitle.Position = UDim2.new(0, 0, 0, (i - 1) * 50) -- Verschieben nach links und unten
@@ -235,16 +235,15 @@ for i, tabName in ipairs(tabs) do
 
                 -- Beispielaktion für Teleport-Optionen
                 optionButton.MouseButton1Click:Connect(function()
-                    local player = game.Players.LocalPlayer
                     if option == "Bank" then
                         -- Teleportiere den Spieler zur Bank
-                        player.Character:MoveTo(Vector3.new(0, 10, 0))
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(0, 10, 0))
                     elseif option == "Jeweler" then
                         -- Teleportiere den Spieler zum Juwelier
-                        player.Character:MoveTo(Vector3.new(10, 0, 10))
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(10, 0, 10))
                     elseif option == "Dealership" then
                         -- Teleportiere den Spieler zum Autohaus
-                        player.Character:MoveTo(Vector3.new(-10, 0, -10))
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-10, 0, -10))
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
                         local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
@@ -255,7 +254,7 @@ for i, tabName in ipairs(tabs) do
                                 wait(0.1)
                                 driveSeat:Sit(player.Character.Humanoid)
                                 print("Player seated in the vehicle.")
-
+                                
                                 local target = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
                                 if target then
                                     vehicle:SetPrimaryPartCFrame(CFrame.new(target.Position))
@@ -269,12 +268,18 @@ for i, tabName in ipairs(tabs) do
                         else
                             warn("Vehicle or DriveSeat not found.")
                         end
-                    end
-                end)
-            end
-        end
-    end
-end
+
+                 end)
+             end
+         end
+     end
+ end
+
+ -- Car settings
+ optionButton.MouseButton1Click:Connect(function()
+    if option == "Always working" then 
+      vehicle.IsOn = true
+    end)
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
