@@ -234,14 +234,16 @@ for i, tabName in ipairs(tabs) do
                 optionButton.TextSize = 16
                 optionButton.Parent = dropdownContent
 
+                    local player = game.Players.LocalPlayer
+                    local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
+                
                 -- Beispielaktion für Teleport-Optionen
                 optionButton.MouseButton1Click:Connect(function()
                     local player = game.Players.LocalPlayer
                     if option == "Bank" then
                         -- Teleportiere den Spieler zur Bank
-                       local player = game.Players.LocalPlayer
-                       local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
-                            vehicle.IsOn = true
+                       
+                            vehicle.IsOn.Value = true
                     elseif option == "Jeweler" then
                         -- Teleportiere den Spieler zum Juwelier
                         player.Character:MoveTo(Vector3.new(10, 0, 10))
