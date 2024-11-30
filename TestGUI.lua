@@ -250,7 +250,6 @@ for i, tabName in ipairs(tabs) do
                         -- Teleportiere den Spieler zum Schmuggler
                         local player = game.Players.LocalPlayer
                         local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
-                            print("vehicle found: ", vehicle)
                         if vehicle and vehicle:FindFirstChild("DriveSeat") then
                             local driveSeat = vehicle.DriveSeat
                             if driveSeat:IsA("VehicleSeat") then
@@ -278,6 +277,8 @@ for i, tabName in ipairs(tabs) do
         end
     end
 end
+
+print("GUI has been closed")
 
 --Car settings
 optionButton.MouseButton1Click:Connect(function()
@@ -314,4 +315,4 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
-print("GUI has been closed")
+
