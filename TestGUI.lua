@@ -243,7 +243,9 @@ for i, tabName in ipairs(tabs) do
                     if option == "Bank" then
                         -- Teleportiere den Spieler zur Bank
                        
-                            vehicle.IsOn.Value = true
+                            if vehicle:FindFirstChild("IsOn") then 
+                                vehicle.IsOn.Value = true
+                            end
                     elseif option == "Jeweler" then
                         -- Teleportiere den Spieler zum Juwelier
                         player.Character:MoveTo(Vector3.new(10, 0, 10))
