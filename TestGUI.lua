@@ -247,6 +247,7 @@ for i, tabName in ipairs(tabs) do
                         player.Character:MoveTo(Vector3.new(-10, 0, -10))
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
+                        local player = game.Players.LocalPlayer
                         local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
                         if vehicle and vehicle:FindFirstChild("DriveSeat") then
                             local driveSeat = vehicle.DriveSeat
