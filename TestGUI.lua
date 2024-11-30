@@ -1,4 +1,4 @@
-print("GUI has been opened")
+
 local gui = Instance.new("ScreenGui")
 gui.ResetOnSpawn = false
 gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -330,4 +330,3 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 end)
 
-print("GUI has been closed")
