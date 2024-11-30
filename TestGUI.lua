@@ -275,7 +275,7 @@ for i, tabName in ipairs(tabs) do
                         end
                     end
                  end
-                end)
+                end))
             end
         end
     end
