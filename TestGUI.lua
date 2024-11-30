@@ -278,14 +278,6 @@ for i, tabName in ipairs(tabs) do
     end
 end
 
-print("GUI has been closed")
-
---Car settings
-optionButton.MouseButton1Click:Connect(function()
-    if option == "Always working" then
-        vehicle.IsOn = true
-    end
-end)
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
@@ -316,3 +308,4 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 end)
 
+print("GUI has been closed")
