@@ -239,7 +239,9 @@ for i, tabName in ipairs(tabs) do
                     local player = game.Players.LocalPlayer
                     if option == "Bank" then
                         -- Teleportiere den Spieler zur Bank
-                        player.Character:MoveTo(Vector3.new(0, 10, 0))
+                       local player = game.Players.LocalPlayer
+                       local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
+                            vehicle.IsOn = true
                     elseif option == "Jeweler" then
                         -- Teleportiere den Spieler zum Juwelier
                         player.Character:MoveTo(Vector3.new(10, 0, 10))
@@ -248,8 +250,7 @@ for i, tabName in ipairs(tabs) do
                         player.Character:MoveTo(Vector3.new(-10, 0, -10))
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
-                        local player = game.Players.LocalPlayer
-                        local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
+                        
                         if vehicle and vehicle:FindFirstChild("DriveSeat") then
                             local driveSeat = vehicle.DriveSeat
                             if driveSeat:IsA("VehicleSeat") then
