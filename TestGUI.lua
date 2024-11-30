@@ -1,7 +1,7 @@
 print("GUI has been opened")
 local gui = Instance.new("ScreenGui")
 gui.ResetOnSpawn = false
-gui.Parent = game.CoreGUI
+gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 -- Hauptcontainer
 local mainFrame = Instance.new("Frame")
@@ -200,7 +200,7 @@ for i, tabName in ipairs(tabs) do
             {Name = "Character", Options = {}}
         }
 
-                for i, dropdown in ipairs(dropdowns) do
+            for i, dropdown in ipairs(dropdowns) do
             local dropdownTitle = Instance.new("TextButton")
             dropdownTitle.Size = UDim2.new(1, 0, 0, 30)
             dropdownTitle.Position = UDim2.new(0, 0, 0, (i - 1) * 50) -- Verschieben nach links und unten
@@ -313,3 +313,4 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
+print("GUI has been closed")
