@@ -283,6 +283,23 @@ for i, tabName in ipairs(tabs) do
     end
 end
 
+-- Fun tab
+if tabName == "Fun" then 
+    local carWorkingButton = Instance.New("TextButton")
+end
+
+local buttons = {"carWorkingButton"}
+
+for l, button in ipairs(buttons) do
+    optionButton.Size = UDim2.new(1, -10, 0, 30)
+    optionButton.Position = UDim2.new(0, 5, 0, (j - 1) * 40)
+    optionButton.Text = option
+    optionButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    optionButton.TextColor3 = Color3.new(1, 1, 1)
+    optionButton.Font = Enum.Font.SourceSans
+    optionButton.TextSize = 16
+    optionButton.Parent = dropdownContent
+
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
