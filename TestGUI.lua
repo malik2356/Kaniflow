@@ -1,6 +1,6 @@
 local gui = Instance.new("ScreenGui")
 gui.ResetOnSpawn = false
-gui.Parent = game.CoreGui
+gui.Parent = game.Players.LocalPlayer.PlayerGui
 
 -- Hauptcontainer
 local mainFrame = Instance.new("Frame")
