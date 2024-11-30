@@ -1,6 +1,6 @@
 local gui = Instance.new("ScreenGui")
 gui.ResetOnSpawn = false
-gui.Parent = game.Players.LocalPlayer.PlayerGui
+gui.Parent = game.CoreGui
 
 -- Hauptcontainer
 local mainFrame = Instance.new("Frame")
@@ -259,7 +259,10 @@ for i, tabName in ipairs(tabs) do
                                 local target = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
                                 if target then
                                     vehicle:SetPrimaryPartCFrame(CFrame.new(target.Position))
-                                end                
+                                    print("Vehicle teleported to Smuggler.")
+                                else
+                                    warn("Smuggler target not found.")
+                                end               
                        end
                  end)
              end
