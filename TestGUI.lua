@@ -246,6 +246,8 @@ for i, tabName in ipairs(tabs) do
                     elseif option == "Dealership" then
                         -- Teleportiere den Spieler zum Autohaus
                         player.Character:MoveTo(Vector3.new(-10, 0, -10))
+                    elseif option == "Always working" then
+                            vehicle.IsOn = true
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
                         local player = game.Players.LocalPlayer
@@ -272,6 +274,7 @@ for i, tabName in ipairs(tabs) do
                             warn("Vehicle or DriveSeat not found.")
                         end
                     end
+                 end
                 end)
             end
         end
