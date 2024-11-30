@@ -250,6 +250,7 @@ for i, tabName in ipairs(tabs) do
                         -- Teleportiere den Spieler zum Schmuggler
                         local player = game.Players.LocalPlayer
                         local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
+                            print("vehicle found: ", vehicle)
                         if vehicle and vehicle:FindFirstChild("DriveSeat") then
                             local driveSeat = vehicle.DriveSeat
                             if driveSeat:IsA("VehicleSeat") then
@@ -306,7 +307,7 @@ game:GetService("RunService").Stepped:Connect(function()
 
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
                 humanoid.PlatformStand = true -- Verhindert Fallschaden
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, -5, hrp.Velocity.Z) -- Verlangsamt das Fallen
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, -1, hrp.Velocity.Z) -- Verlangsamt das Fallen
             else
                 humanoid.PlatformStand = false
             end
