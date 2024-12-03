@@ -1,5 +1,4 @@
 local gui = Instance.new("ScreenGui")
-gui.ResetOnSpawn = false
 gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 -- Hauptcontainer
@@ -13,7 +12,7 @@ mainFrame.Parent = gui
 
 -- Rundung der Ecken des Hauptcontainers
 local mainFrameCorner = Instance.new("UICorner")
-mainFrameCorner.CornerRadius = UDim.new(0, 10)
+mainFrameCorner.CornerRadius = UDim.new(0, 10) -- Anpassen der Rundung der Ecken
 mainFrameCorner.Parent = mainFrame
 
 -- Tab-Leiste
@@ -29,7 +28,7 @@ contentFrame.Position = UDim2.new(0, 0, 0, 50)
 contentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 contentFrame.Parent = mainFrame
 
-local tabs = {"Home", "Settings", "Fun"}
+local tabs = {"Home", "Settings", "Fun"} -- Beispiel-Reiter
 
 for i, tabName in ipairs(tabs) do
     local tabButton = Instance.new("TextButton")
@@ -41,7 +40,6 @@ for i, tabName in ipairs(tabs) do
     tabButton.Font = Enum.Font.SourceSansBold
     tabButton.TextSize = 18
     tabButton.Parent = tabBar
-end
 
     tabButton.MouseButton1Click:Connect(function()
         for _, child in pairs(contentFrame:GetChildren()) do
@@ -60,14 +58,14 @@ end
     tabContent.Visible = (i == 1)
     tabContent.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     tabContent.Parent = contentFrame
-     
+
     -- Home-Tab: Buttons und Checkboxen
-   if tabName == "Home" and tabContent then
+    if tabName == "Home" then
         local buttonLabels = {"Steal Car", "Car Fly", "Infinite Yield"}
         for j = 1, 3 do
             local button = Instance.new("TextButton")
             button.Size = UDim2.new(0, 100, 0, 30)
-            button.Position = UDim2.new(0, 40, 0, 20 + (j - 1) * 40)
+            button.Position = UDim2.new(0, 40, 0, 20 + (j - 1) * 40) -- Verschieben der Buttons nach rechts
             button.Text = buttonLabels[j]
             button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
             button.TextColor3 = Color3.new(1, 1, 1)
@@ -125,7 +123,7 @@ end
         for k = 1, 2 do
             local checkboxFrame = Instance.new("Frame")
             checkboxFrame.Size = UDim2.new(0, 140, 0, 20)
-            checkboxFrame.Position = UDim2.new(0, 160, 0, 20 + (k - 1) * 40)
+            checkboxFrame.Position = UDim2.new(0, 160, 0, 20 + (k - 1) * 40) -- Verschieben der Checkboxen nach rechts
             checkboxFrame.BackgroundTransparency = 1
             checkboxFrame.Parent = tabContent
 
@@ -183,27 +181,27 @@ end
     -- Settings-Tab: Scrollbar und Dropdowns
     if tabName == "Settings" then
         local dropdownFrame = Instance.new("Frame")
-        dropdownFrame.Size = UDim2.new(0, 140, 1, 0)
+        dropdownFrame.Size = UDim2.new(0, 140, 1, 0) -- Etwas breitere Sidebar
         dropdownFrame.Position = UDim2.new(0, 0, 0, 0)
         dropdownFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         dropdownFrame.Parent = tabContent
 
         local dropdownList = Instance.new("ScrollingFrame")
         dropdownList.Size = UDim2.new(1, 0, 1, 0)
-        dropdownList.CanvasSize = UDim2.new(0, 0, 2, 0)
+        dropdownList.CanvasSize = UDim2.new(0, 0, 2, 0) -- Ausreichend Platz für mehrere Dropdowns
         dropdownList.ScrollBarThickness = 10
         dropdownList.Parent = dropdownFrame
 
         local dropdowns = {
             {Name = "Teleports", Options = {"Bank", "Jeweler", "Dealership", "Smuggler"}},
-            {Name = "Car Settings", Options = {"Always working"}},
+            {Name = "Car Settings", Options = {}},
             {Name = "Character", Options = {}}
         }
 
-            for i, dropdown in ipairs(dropdowns) do
+        for i, dropdown in ipairs(dropdowns) do
             local dropdownTitle = Instance.new("TextButton")
             dropdownTitle.Size = UDim2.new(1, 0, 0, 30)
-            dropdownTitle.Position = UDim2.new(0, 0, 0, (i - 1) * 50) -- Verschieben nach links und unten
+            dropdownTitle.Position = UDim2.new(0, 0, 0, (i - 1) * 50)
             dropdownTitle.Text = dropdown.Name
             dropdownTitle.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
             dropdownTitle.TextColor3 = Color3.new(1, 1, 1)
@@ -234,56 +232,26 @@ end
                 optionButton.TextSize = 16
                 optionButton.Parent = dropdownContent
 
-                    local player = game.Players.LocalPlayer
-                    local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
-                
                 -- Beispielaktion für Teleport-Optionen
                 optionButton.MouseButton1Click:Connect(function()
-                    local player = game.Players.LocalPlayer
                     if option == "Bank" then
                         -- Teleportiere den Spieler zur Bank
-                       
-                            if vehicle:FindFirstChild("IsOn") then 
-                                vehicle.IsOn.Value = true
-                            end
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(0, 10, 0))
                     elseif option == "Jeweler" then
                         -- Teleportiere den Spieler zum Juwelier
-                        player.Character:MoveTo(Vector3.new(10, 0, 10))
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(10, 0, 10))
                     elseif option == "Dealership" then
                         -- Teleportiere den Spieler zum Autohaus
-                        player.Character:MoveTo(Vector3.new(-10, 0, -10))
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-10, 0, -10))
                     elseif option == "Smuggler" then
                         -- Teleportiere den Spieler zum Schmuggler
-                        
-                        if vehicle and vehicle:FindFirstChild("DriveSeat") then
-                            local driveSeat = vehicle.DriveSeat
-                            if driveSeat:IsA("VehicleSeat") then
-                                player.Character.HumanoidRootPart.CFrame = driveSeat.CFrame
-                                wait(0.1)
-                                driveSeat:Sit(player.Character.Humanoid)
-                                print("Player seated in the vehicle.")
-
-                                local target = game.ReplicatedStorage.SmugglerNavigationTargets:FindFirstChild("Smuggler")
-                                if target then
-                                    vehicle:SetPrimaryPartCFrame(CFrame.new(target.Position))
-                                    print("Vehicle teleported to Smuggler.")
-                                else
-                                    warn("Smuggler target not found.")
-                                end
-                            else
-                                warn("DriveSeat is not a VehicleSeat.")
-                            end
-                        else
-                            warn("Vehicle or DriveSeat not found.")
-                        end
+                        game.Players.LocalPlayer.Character:MoveTo(Vector3.new(20, 0, 20))
                     end
                 end)
             end
         end
     end
 end
-
-
 
 -- Cheat-Name anzeigen
 local cheatNameLabel = Instance.new("TextLabel")
@@ -306,13 +274,10 @@ game:GetService("RunService").Stepped:Connect(function()
 
             if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
                 humanoid.PlatformStand = true -- Verhindert Fallschaden
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, -12, hrp.Velocity.Z) -- Verlangsamt das Fallen
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, -5, hrp.Velocity.Z) -- Verlangsamt das Fallen
             else
                 humanoid.PlatformStand = false
             end
         end
     end
 end)
-
-
-    end
