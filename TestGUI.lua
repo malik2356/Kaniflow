@@ -103,27 +103,26 @@ for i, tabName in ipairs(tabs) do
                         -- Schwebemodus aktivieren
                         runService.Stepped:Connect(function()
                             if carFlyEnabled and vehicle and vehicle.PrimaryPart then
-                                vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0) -- Nullgeschwindigkeit, um Schwebemodus zu ermöglichen
-                            end
-                        end)
-
-                        -- Steuern des Fahrzeugs basierend auf Kamerarichtung
-                        userInputService.InputBegan:Connect(function(input, gameProcessed)
-                            if not gameProcessed and carFlyEnabled then
-                                local camera = game.Workspace.CurrentCamera
-                                if input.KeyCode == Enum.KeyCode.W then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = camera.CFrame.LookVector * flySpeed
-                                elseif input.KeyCode == Enum.KeyCode.S then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = -camera.CFrame.LookVector * flySpeed
-                                elseif input.KeyCode == Enum.KeyCode.A then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = -camera.CFrame.RightVector * flySpeed
-                                elseif input.KeyCode == Enum.KeyCode.D then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = camera.CFrame.RightVector * flySpeed
-                                elseif input.KeyCode == Enum.KeyCode.E then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, flySpeed, 0)
-                                elseif input.KeyCode == Enum.KeyCode.Q then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, -flySpeed, 0)
+                                local velocity = Vector3.new(0, 0, 0)
+                                if userInputService:IsKeyDown(Enum.KeyCode.W) then
+                                    velocity = velocity + game.Workspace.CurrentCamera.CFrame.LookVector * flySpeed
                                 end
+                                if userInputService:IsKeyDown(Enum.KeyCode.S) then
+                                    velocity = velocity - game.Workspace.CurrentCamera.CFrame.LookVector * flySpeed
+                                end
+                                if userInputService:IsKeyDown(Enum.KeyCode.A) then
+                                    velocity = velocity - game.Workspace.CurrentCamera.CFrame.RightVector * flySpeed
+                                end
+                                if userInputService:IsKeyDown(Enum.KeyCode.D) then
+                                    velocity = velocity + game.Workspace.CurrentCamera.CFrame.RightVector * flySpeed
+                                end
+                                if userInputService:IsKeyDown(Enum.KeyCode.E) then
+                                    velocity = velocity + Vector3.new(0, flySpeed, 0)
+                                end
+                                if userInputService:IsKeyDown(Enum.KeyCode.Q) then
+                                    velocity = velocity + Vector3.new(0, -flySpeed, 0)
+                                end
+                                vehicle.PrimaryPart.AssemblyLinearVelocity = velocity
                             end
                         end)
 
@@ -195,7 +194,11 @@ for i, tabName in ipairs(tabs) do
             checkbox.Size = UDim2.new(0, 20, 0, 20)
             checkbox.Position = UDim2.new(0, 0, 0, 0)
             checkbox.Text = ""
-                        checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
+            checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
+            checkbox.Parent = checkboxFrame
+
+            checkbox.MouseButton1Click:Connect(function()
+            if             checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
             checkbox.Parent = checkboxFrame
 
             checkbox.MouseButton1Click:Connect(function()
