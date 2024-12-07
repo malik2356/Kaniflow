@@ -75,6 +75,10 @@ for i, tabName in ipairs(tabs) do
 
             -- Car Fly Button Functionality
             local carFlyEnabled = false
+            local flySpeed = 50
+            local userInputService = game:GetService("UserInputService")
+            local runService = game:GetService("RunService")
+            
             if button.Text == "Car Fly" then
                 button.MouseButton1Click:Connect(function()
                     carFlyEnabled = not carFlyEnabled
@@ -96,20 +100,25 @@ for i, tabName in ipairs(tabs) do
                             return
                         end
 
-                        -- Steuern des Fahrzeugs
-                        local userInputService = game:GetService("UserInputService")
-                        local flySpeed = 50
+                        -- Schwebemodus aktivieren
+                        runService.Stepped:Connect(function()
+                            if carFlyEnabled and vehicle and vehicle.PrimaryPart then
+                                vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0) -- Nullgeschwindigkeit, um Schwebemodus zu ermöglichen
+                            end
+                        end)
 
+                        -- Steuern des Fahrzeugs basierend auf Kamerarichtung
                         userInputService.InputBegan:Connect(function(input, gameProcessed)
                             if not gameProcessed and carFlyEnabled then
+                                local camera = game.Workspace.CurrentCamera
                                 if input.KeyCode == Enum.KeyCode.W then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = vehicle.PrimaryPart.CFrame.LookVector * flySpeed
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = camera.CFrame.LookVector * flySpeed
                                 elseif input.KeyCode == Enum.KeyCode.S then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = -vehicle.PrimaryPart.CFrame.LookVector * flySpeed
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = -camera.CFrame.LookVector * flySpeed
                                 elseif input.KeyCode == Enum.KeyCode.A then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = -vehicle.PrimaryPart.CFrame.RightVector * flySpeed
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = -camera.CFrame.RightVector * flySpeed
                                 elseif input.KeyCode == Enum.KeyCode.D then
-                                    vehicle.PrimaryPart.AssemblyLinearVelocity = vehicle.PrimaryPart.CFrame.RightVector * flySpeed
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = camera.CFrame.RightVector * flySpeed
                                 elseif input.KeyCode == Enum.KeyCode.E then
                                     vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, flySpeed, 0)
                                 elseif input.KeyCode == Enum.KeyCode.Q then
@@ -121,6 +130,9 @@ for i, tabName in ipairs(tabs) do
                     else
                         button.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- Grau
                         button.Text = "Car Fly (OFF)"
+                        if vehicle and vehicle.PrimaryPart then
+                            vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0) -- Geschwindigkeit zurücksetzen
+                        end
                     end
                 end)
             end
@@ -183,7 +195,7 @@ for i, tabName in ipairs(tabs) do
             checkbox.Size = UDim2.new(0, 20, 0, 20)
             checkbox.Position = UDim2.new(0, 0, 0, 0)
             checkbox.Text = ""
-            checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
+                        checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
             checkbox.Parent = checkboxFrame
 
             checkbox.MouseButton1Click:Connect(function()
