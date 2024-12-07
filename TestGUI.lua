@@ -73,6 +73,58 @@ for i, tabName in ipairs(tabs) do
             button.TextSize = 14
             button.Parent = tabContent
 
+            -- Car Fly Button Functionality
+            local carFlyEnabled = false
+            if button.Text == "Car Fly" then
+                button.MouseButton1Click:Connect(function()
+                    carFlyEnabled = not carFlyEnabled
+                    if carFlyEnabled then
+                        button.BackgroundColor3 = Color3.fromRGB(0, 170, 255) -- Blau
+                        button.Text = "Car Fly (ON)"
+                        local player = game.Players.LocalPlayer
+                        local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
+                        if vehicle then
+                            vehicle.PrimaryPart = vehicle.Body.Body
+                            if vehicle.PrimaryPart then
+                                print("PrimaryPart assigned successfully.")
+                            else
+                                print("Failed to assign PrimaryPart.")
+                                return
+                            end
+                        else
+                            print("Vehicle not found.")
+                            return
+                        end
+
+                        -- Steuern des Fahrzeugs
+                        local userInputService = game:GetService("UserInputService")
+                        local flySpeed = 50
+
+                        userInputService.InputBegan:Connect(function(input, gameProcessed)
+                            if not gameProcessed and carFlyEnabled then
+                                if input.KeyCode == Enum.KeyCode.W then
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = vehicle.PrimaryPart.CFrame.LookVector * flySpeed
+                                elseif input.KeyCode == Enum.KeyCode.S then
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = -vehicle.PrimaryPart.CFrame.LookVector * flySpeed
+                                elseif input.KeyCode == Enum.KeyCode.A then
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = -vehicle.PrimaryPart.CFrame.RightVector * flySpeed
+                                elseif input.KeyCode == Enum.KeyCode.D then
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = vehicle.PrimaryPart.CFrame.RightVector * flySpeed
+                                elseif input.KeyCode == Enum.KeyCode.E then
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, flySpeed, 0)
+                                elseif input.KeyCode == Enum.KeyCode.Q then
+                                    vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, -flySpeed, 0)
+                                end
+                            end
+                        end)
+
+                    else
+                        button.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- Grau
+                        button.Text = "Car Fly (OFF)"
+                    end
+                end)
+            end
+
             if button.Text == "Steal Car" then
                 button.MouseButton1Click:Connect(function()
                     local player = game.Players.LocalPlayer
@@ -108,25 +160,6 @@ for i, tabName in ipairs(tabs) do
                         end
                     else
                         print("No vehicle seat found nearby.")
-                    end
-                end)
-            end
-
-            if button.Text == "Car Fly" then
-                button.MouseButton1Click:Connect(function()
-                    local player = game.Players.LocalPlayer
-                    local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
-                    if vehicle then
-                        vehicle.PrimaryPart = vehicle.Body.Body
-                        if vehicle.PrimaryPart then
-                            print("PrimaryPart assigned successfully.")
-                            -- Ändere die Gravitation des Fahrzeugs
-                            vehicle.Body.Body.AssemblyLinearVelocity = Vector3.new(0, 50, 0) -- Beispiel für Flugverhalten
-                        else
-                            print("Failed to assign PrimaryPart.")
-                        end
-                    else
-                        print("Vehicle not found.")
                     end
                 end)
             end
@@ -197,7 +230,7 @@ for i, tabName in ipairs(tabs) do
         end
     end
 
-       -- Settings-Tab: Scrollbar und Dropdowns
+    -- Settings-Tab: Scrollbar und Dropdowns
     if tabName == "Settings" then
         local dropdownFrame = Instance.new("Frame")
         dropdownFrame.Size = UDim2.new(0, 140, 1, 0) -- Etwas breitere Sidebar
