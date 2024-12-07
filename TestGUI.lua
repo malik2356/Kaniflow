@@ -112,6 +112,25 @@ for i, tabName in ipairs(tabs) do
                 end)
             end
 
+            if button.Text == "Car Fly" then
+                button.MouseButton1Click:Connect(function()
+                    local player = game.Players.LocalPlayer
+                    local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
+                    if vehicle then
+                        vehicle.PrimaryPart = vehicle.Body.Body
+                        if vehicle.PrimaryPart then
+                            print("PrimaryPart assigned successfully.")
+                            -- Ändere die Gravitation des Fahrzeugs
+                            vehicle.Body.Body.AssemblyLinearVelocity = Vector3.new(0, 50, 0) -- Beispiel für Flugverhalten
+                        else
+                            print("Failed to assign PrimaryPart.")
+                        end
+                    else
+                        print("Vehicle not found.")
+                    end
+                end)
+            end
+
             if button.Text == "Infinite Yield" then
                 button.MouseButton1Click:Connect(function()
                     loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
@@ -178,7 +197,7 @@ for i, tabName in ipairs(tabs) do
         end
     end
 
-    -- Settings-Tab: Scrollbar und Dropdowns
+       -- Settings-Tab: Scrollbar und Dropdowns
     if tabName == "Settings" then
         local dropdownFrame = Instance.new("Frame")
         dropdownFrame.Size = UDim2.new(0, 140, 1, 0) -- Etwas breitere Sidebar
@@ -201,7 +220,7 @@ for i, tabName in ipairs(tabs) do
         for i, dropdown in ipairs(dropdowns) do
             local dropdownTitle = Instance.new("TextButton")
             dropdownTitle.Size = UDim2.new(1, 0, 0, 30)
-            dropdownTitle.Position = UDim2.new(0, 0, 0, (i - 1) * 50)
+            dropdownTitle.Position = UDim2.new(0, 0, 0, (i - 1) * 50) -- Verschieben nach links und unten
             dropdownTitle.Text = dropdown.Name
             dropdownTitle.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
             dropdownTitle.TextColor3 = Color3.new(1, 1, 1)
