@@ -121,12 +121,12 @@ for i, tabName in ipairs(tabs) do
             end
 
             if button.Text == "Car Fly" then
-                button.MouseButton1Click:Connect(function()
-                    local carFlyEnabled = false
-                    local flySpeed = 50
-                    local userInputService = game:GetService("UserInputService")
-                    local runService = game:GetService("RunService")
+                local carFlyEnabled = false
+                local flySpeed = 100
+                local userInputService = game:GetService("UserInputService")
+                local runService = game:GetService("RunService")
 
+                button.MouseButton1Click:Connect(function()
                     carFlyEnabled = not carFlyEnabled
                     if carFlyEnabled then
                         button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
@@ -137,7 +137,7 @@ for i, tabName in ipairs(tabs) do
                             vehicle.PrimaryPart = vehicle.Body.Body
                             if vehicle.PrimaryPart then
                                 print("PrimaryPart assigned successfully.")
-                                vehicle.PrimaryPart.CustomPhysicalProperties = PhysicalProperties.new(0.1, 0.3, 0.5)  -- Verhindert Rotation
+                                vehicle.PrimaryPart.CustomPhysicalProperties = PhysicalProperties.new(0.1, 0.3, 0.5)
                             else
                                 print("Failed to assign PrimaryPart.")
                                 return
@@ -172,6 +172,9 @@ for i, tabName in ipairs(tabs) do
                                 
                                 -- Verhindert Rotation außer um die Y-Achse (links und rechts)
                                 vehicle.PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, vehicle.PrimaryPart.AssemblyAngularVelocity.Y, 0)
+                                
+                                -- Stellt sicher, dass das Fahrzeug der Kamera folgt
+                                vehicle:SetPrimaryPartCFrame(CFrame.new(vehicle.PrimaryPart.Position, vehicle.PrimaryPart.Position + Vector3.new(game.Workspace.CurrentCamera.CFrame.LookVector.X, 0, game.Workspace.CurrentCamera.CFrame.LookVector.Z)))
                             end
                         end)
 
