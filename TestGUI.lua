@@ -137,6 +137,7 @@ for i, tabName in ipairs(tabs) do
                             vehicle.PrimaryPart = vehicle.Body.Body
                             if vehicle.PrimaryPart then
                                 print("PrimaryPart assigned successfully.")
+                                vehicle.PrimaryPart.CustomPhysicalProperties = PhysicalProperties.new(0.1, 0.3, 0.5)  -- Verhindert Rotation
                             else
                                 print("Failed to assign PrimaryPart.")
                                 return
@@ -168,6 +169,7 @@ for i, tabName in ipairs(tabs) do
                                     velocity = velocity + Vector3.new(0, -flySpeed, 0)
                                 end
                                 vehicle.PrimaryPart.AssemblyLinearVelocity = velocity
+                                vehicle.PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)  -- Verhindert Rotation
                             end
                         end)
 
@@ -176,6 +178,7 @@ for i, tabName in ipairs(tabs) do
                         button.Text = "Car Fly (OFF)"
                         if vehicle and vehicle.PrimaryPart then
                             vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                            vehicle.PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)  -- Verhindert Rotation
                         end
                     end
                 end)
@@ -200,7 +203,7 @@ for i, tabName in ipairs(tabs) do
             local checkbox = Instance.new("TextButton")
             checkbox.Size = UDim2.new(0, 20, 0, 20)
             checkbox.Position = UDim2.new(0, 0, 0, 0)
-                        checkbox.Text = ""
+            checkbox.Text = ""
             checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
             checkbox.Parent = checkboxFrame
 
