@@ -9,10 +9,11 @@ mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 mainFrame.Active = true
 mainFrame.Draggable = true
 mainFrame.Parent = gui
+mainFrame.Visible = true
 
 -- Rundung der Ecken des Hauptcontainers
 local mainFrameCorner = Instance.new("UICorner")
-mainFrameCorner.CornerRadius = UDim.new(0, 10) -- Anpassen der Rundung der Ecken
+mainFrameCorner.CornerRadius = UDim.new(0, 10)
 mainFrameCorner.Parent = mainFrame
 
 -- Tab-Leiste
@@ -20,6 +21,7 @@ local tabBar = Instance.new("Frame")
 tabBar.Size = UDim2.new(1, 0, 0, 50)
 tabBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 tabBar.Parent = mainFrame
+tabBar.Visible = true
 
 -- Inhaltsbereich
 local contentFrame = Instance.new("Frame")
@@ -27,8 +29,9 @@ contentFrame.Size = UDim2.new(1, 0, 1, -50)
 contentFrame.Position = UDim2.new(0, 0, 0, 50)
 contentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 contentFrame.Parent = mainFrame
+contentFrame.Visible = true
 
-local tabs = {"Home", "Settings", "Fun"} -- Beispiel-Reiter
+local tabs = {"Home", "Settings", "Fun"}
 
 for i, tabName in ipairs(tabs) do
     local tabButton = Instance.new("TextButton")
@@ -40,6 +43,7 @@ for i, tabName in ipairs(tabs) do
     tabButton.Font = Enum.Font.SourceSansBold
     tabButton.TextSize = 18
     tabButton.Parent = tabBar
+    tabButton.Visible = true
 
     tabButton.MouseButton1Click:Connect(function()
         for _, child in pairs(contentFrame:GetChildren()) do
@@ -58,6 +62,7 @@ for i, tabName in ipairs(tabs) do
     tabContent.Visible = (i == 1)
     tabContent.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     tabContent.Parent = contentFrame
+    tabContent.Visible = true
 
     -- Home-Tab: Buttons und Checkboxen
     if tabName == "Home" then
@@ -65,76 +70,17 @@ for i, tabName in ipairs(tabs) do
         for j = 1, 3 do
             local button = Instance.new("TextButton")
             button.Size = UDim2.new(0, 100, 0, 30)
-            button.Position = UDim2.new(0, 40, 0, 20 + (j - 1) * 40) -- Verschieben der Buttons nach rechts
+            button.Position = UDim2.new(0, 40, 0, 20 + (j - 1) * 40)
             button.Text = buttonLabels[j]
             button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
             button.TextColor3 = Color3.new(1, 1, 1)
             button.Font = Enum.Font.SourceSans
             button.TextSize = 14
             button.Parent = tabContent
+            button.Visible = true
 
-            -- Car Fly Button Functionality
-            local carFlyEnabled = false
-            local flySpeed = 50
-            local userInputService = game:GetService("UserInputService")
-            local runService = game:GetService("RunService")
-            
-            if button.Text == "Car Fly" then
-                button.MouseButton1Click:Connect(function()
-                    carFlyEnabled = not carFlyEnabled
-                    if carFlyEnabled then
-                        button.BackgroundColor3 = Color3.fromRGB(0, 170, 255) -- Blau
-                        button.Text = "Car Fly (ON)"
-                        local player = game.Players.LocalPlayer
-                        local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
-                        if vehicle then
-                            vehicle.PrimaryPart = vehicle.Body.Body
-                            if vehicle.PrimaryPart then
-                                print("PrimaryPart assigned successfully.")
-                            else
-                                print("Failed to assign PrimaryPart.")
-                                return
-                            end
-                        else
-                            print("Vehicle not found.")
-                            return
-                        end
-
-                        -- Schwebemodus aktivieren
-                        runService.Stepped:Connect(function()
-                            if carFlyEnabled and vehicle and vehicle.PrimaryPart then
-                                local velocity = Vector3.new(0, 0, 0)
-                                if userInputService:IsKeyDown(Enum.KeyCode.W) then
-                                    velocity = velocity + game.Workspace.CurrentCamera.CFrame.LookVector * flySpeed
-                                end
-                                if userInputService:IsKeyDown(Enum.KeyCode.S) then
-                                    velocity = velocity - game.Workspace.CurrentCamera.CFrame.LookVector * flySpeed
-                                end
-                                if userInputService:IsKeyDown(Enum.KeyCode.A) then
-                                    velocity = velocity - game.Workspace.CurrentCamera.CFrame.RightVector * flySpeed
-                                end
-                                if userInputService:IsKeyDown(Enum.KeyCode.D) then
-                                    velocity = velocity + game.Workspace.CurrentCamera.CFrame.RightVector * flySpeed
-                                end
-                                if userInputService:IsKeyDown(Enum.KeyCode.E) then
-                                    velocity = velocity + Vector3.new(0, flySpeed, 0)
-                                end
-                                if userInputService:IsKeyDown(Enum.KeyCode.Q) then
-                                    velocity = velocity + Vector3.new(0, -flySpeed, 0)
-                                end
-                                vehicle.PrimaryPart.AssemblyLinearVelocity = velocity
-                            end
-                        end)
-
-                    else
-                        button.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- Grau
-                        button.Text = "Car Fly (OFF)"
-                        if vehicle and vehicle.PrimaryPart then
-                            vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0) -- Geschwindigkeit zurücksetzen
-                        end
-                    end
-                end)
-            end
+            -- Fehlerprotokollierung hinzufügen
+            print("Button " .. button.Text .. " hinzugefügt.")
 
             if button.Text == "Steal Car" then
                 button.MouseButton1Click:Connect(function()
@@ -161,7 +107,6 @@ for i, tabName in ipairs(tabs) do
                         wait(0.1)
                         closestSeat:Sit(character.Humanoid)
                         print("Player seated in the closest vehicle seat.")
-                        -- Versuche, den VehicleController zu nutzen
                         local vehicleController = game.Players.LocalPlayer.PlayerScripts.PlayerModule.ControlModule:FindFirstChild("VehicleController")
                         if vehicleController and vehicleController:FindFirstChild("Enable") then
                             vehicleController.Enable:Invoke(true, closestSeat)
@@ -171,6 +116,67 @@ for i, tabName in ipairs(tabs) do
                         end
                     else
                         print("No vehicle seat found nearby.")
+                    end
+                end)
+            end
+
+            if button.Text == "Car Fly" then
+                button.MouseButton1Click:Connect(function()
+                    local carFlyEnabled = false
+                    local flySpeed = 50
+                    local userInputService = game:GetService("UserInputService")
+                    local runService = game:GetService("RunService")
+
+                    carFlyEnabled = not carFlyEnabled
+                    if carFlyEnabled then
+                        button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+                        button.Text = "Car Fly (ON)"
+                        local player = game.Players.LocalPlayer
+                        local vehicle = game.Workspace.Vehicles:FindFirstChild(player.Name)
+                        if vehicle then
+                            vehicle.PrimaryPart = vehicle.Body.Body
+                            if vehicle.PrimaryPart then
+                                print("PrimaryPart assigned successfully.")
+                            else
+                                print("Failed to assign PrimaryPart.")
+                                return
+                            end
+                        else
+                            print("Vehicle not found.")
+                            return
+                        end
+
+                        runService.Stepped:Connect(function()
+                            if carFlyEnabled and vehicle and vehicle.PrimaryPart then
+                                local velocity = Vector3.new(0, 0, 0)
+                                if userInputService:IsKeyDown(Enum.KeyCode.W) then
+                                    velocity = velocity + game.Workspace.CurrentCamera.CFrame.LookVector * flySpeed
+                                end
+                                if userInputService:IsKeyDown(Enum.KeyCode.S) then
+                                    velocity = velocity - game.Workspace.CurrentCamera.CFrame.LookVector * flySpeed
+                                end
+                                if userInputService:IsKeyDown(Enum.KeyCode.A) then
+                                    velocity = velocity - game.Workspace.CurrentCamera.CFrame.RightVector * flySpeed
+                                end
+                                if userInputService:IsKeyDown(Enum.KeyCode.D) then
+                                    velocity = velocity + game.Workspace.CurrentCamera.CFrame.RightVector * flySpeed
+                                end
+                                if userInputService:IsKeyDown(Enum.KeyCode.E) then
+                                    velocity = velocity + Vector3.new(0, flySpeed, 0)
+                                end
+                                if userInputService:IsKeyDown(Enum.KeyCode.Q) then
+                                    velocity = velocity + Vector3.new(0, -flySpeed, 0)
+                                end
+                                vehicle.PrimaryPart.AssemblyLinearVelocity = velocity
+                            end
+                        end)
+
+                    else
+                        button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+                        button.Text = "Car Fly (OFF)"
+                        if vehicle and vehicle.PrimaryPart then
+                            vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                        end
                     end
                 end)
             end
@@ -186,19 +192,16 @@ for i, tabName in ipairs(tabs) do
         for k = 1, 2 do
             local checkboxFrame = Instance.new("Frame")
             checkboxFrame.Size = UDim2.new(0, 140, 0, 20)
-            checkboxFrame.Position = UDim2.new(0, 160, 0, 20 + (k - 1) * 40) -- Verschieben der Checkboxen nach rechts
+            checkboxFrame.Position = UDim2.new(0, 160, 0, 20 + (k - 1) * 40)
             checkboxFrame.BackgroundTransparency = 1
             checkboxFrame.Parent = tabContent
+            checkboxFrame.Visible = true
 
             local checkbox = Instance.new("TextButton")
             checkbox.Size = UDim2.new(0, 20, 0, 20)
             checkbox.Position = UDim2.new(0, 0, 0, 0)
-            checkbox.Text = ""
+                        checkbox.Text = ""
             checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-            checkbox.Parent = checkboxFrame
-
-            checkbox.MouseButton1Click:Connect(function()
-            if             checkbox.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
             checkbox.Parent = checkboxFrame
 
             checkbox.MouseButton1Click:Connect(function()
