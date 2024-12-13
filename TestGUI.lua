@@ -169,7 +169,9 @@ for i, tabName in ipairs(tabs) do
                                     velocity = velocity + Vector3.new(0, -flySpeed, 0)
                                 end
                                 vehicle.PrimaryPart.AssemblyLinearVelocity = velocity
-                                vehicle.PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)  -- Verhindert Rotation
+                                
+                                -- Verhindert Rotation außer um die Y-Achse (links und rechts)
+                                vehicle.PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, vehicle.PrimaryPart.AssemblyAngularVelocity.Y, 0)
                             end
                         end)
 
@@ -178,7 +180,7 @@ for i, tabName in ipairs(tabs) do
                         button.Text = "Car Fly (OFF)"
                         if vehicle and vehicle.PrimaryPart then
                             vehicle.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-                            vehicle.PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)  -- Verhindert Rotation
+                            vehicle.PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
                         end
                     end
                 end)
